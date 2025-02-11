@@ -1,0 +1,42 @@
+---
+import type { Post, Priority } from "@/types/post";
+import { HeroSectionContent } from "./HeroSectionContent";
+
+const { data } = Astro.props;
+
+let initialData: any = [];
+let recent: Post[] = [];
+let priority: Priority[] = [];
+
+try {
+  const feeds = await fetch(Astro.url.origin + "/api/feed");
+  const feedDatas = await feeds.json();
+
+  recent = feedDatas.recent;
+  priority = feedDatas.priority;
+
+  initialData = priority[0] ||
+    recent[0] || {
+      title: "Welcome",
+      type: "Project",
+      shortDescription:
+        "Experience the future of digital innovation with our cutting-edge solutions.",
+      id: "#",
+    };
+} catch (e) {
+  initialData = [];
+  recent = [];
+  priority = [];
+}
+
+console.log(initialData);
+console.log(recent);
+console.log(priority);
+---
+
+<HeroSectionContent
+  recent={recent}
+  priority={priority}
+  initialData={initialData}
+  client:only="react"
+/>

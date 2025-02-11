@@ -1,0 +1,42 @@
+---
+import { RequestForm } from "@/components/RequestForm";
+import { RequestsTable } from "@/components/requests/RequestsTable";
+import { TicketsTable } from "@/components/TicketsTable";
+import Layout from "@/layouts/Layout.astro";
+
+if (!Astro.locals.session) {
+  return Astro.redirect("/");
+}
+
+if (Astro.locals.user?.approved !== true) {
+  return Astro.redirect("/");
+}
+
+const { searchParams } = Astro.url;
+
+const page = searchParams.get("page") || "1";
+---
+
+<Layout>
+  <div class="p-6 space-y-6">
+    <div class="rounded-lg bg-card p-6 shadow-md">
+      <h1 class="text-3xl font-bold mb-2">
+        {Astro.locals.user?.role === "admin" ? "Admin" : "User"} Request Portal
+      </h1>
+      <p class="text-gray-600 mb-6">
+        Submit and track your document requests, permits, and other applications
+      </p>
+
+      {
+        Astro.locals.user?.role === "admin" ? (
+          <RequestsTable client:only />
+        ) : (
+          <>
+            <RequestForm client:only />
+            <TicketsTable client:only />
+          </>
+        )
+      }
+    </div>
+  </div>
+</Layout>

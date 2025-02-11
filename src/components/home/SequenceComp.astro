@@ -1,0 +1,104 @@
+---
+import Carousel from "@/components/home/Carousel.astro";
+import List from "@/components/home/List.astro";
+import MarqueeNest from "./MarqueeNest.astro";
+import { Image } from "astro:assets";
+import RecentPosts from "./RecentPosts.astro";
+---
+
+<div class="w-full h-fit">
+  <MarqueeNest />
+  <section class="px-2 pt-32 bg-white md:px-0">
+    <div
+      class="container items-center max-w-6xl px-5 mx-auto space-y-6 text-center"
+    >
+      <h1
+        class="text-4xl font-extrabold tracking-tight text-left text-gray-900 sm:text-5xl md:text-6xl md:text-center"
+      >
+        <span class="block"
+          >Welcome to <span
+            class="block mt-1 text-teal-600 lg:inline lg:mt-0"
+            data-primary="slate-500">Barangay Sto. Niño</span
+          ></span
+        >
+      </h1>
+      <p
+        class="w-full mx-auto text-base text-left text-gray-500 md:max-w-md sm:text-lg lg:text-2xl md:text-center"
+      >
+        A site for the people of Barangay Sto. Niño, Philippines.
+      </p>
+      <div
+        class="relative flex flex-col justify-center md:flex-row md:space-x-4"
+      >
+        <a
+          href="/tickets"
+          class="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-teal-600 rounded-md md:mb-0 hover:bg-slate-700 md:w-auto"
+          data-primary="purple-500"
+          data-rounded="rounded-md"
+        >
+          Submit a request
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5 ml-1"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <a
+          href="#_"
+          class="flex items-center px-6 py-3 text-gray-500 bg-gray-100 rounded-md hover:bg-gray-200 hover:text-gray-600"
+          data-rounded="rounded-md"
+        >
+          Learn More
+        </a>
+      </div>
+    </div>
+    <div
+      class="container items-center max-w-4xl rounded-lg px-5 mx-auto mt-16 text-center"
+    >
+      <Image
+        src="/stonino.jpg"
+        width={1000}
+        height={1000}
+        class="aspect-video rounded-lg"
+        alt="Sto. Niño"
+        loading="lazy"
+      />
+    </div>
+  </section>
+  <Carousel server:defer />
+  <RecentPosts server:defer>
+      <div slot="fallback">
+        <section class="py-12 px-4">
+          <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map(() => (
+                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+                  <div class="p-6">
+                    <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                    <div class="space-y-3">
+                      <div class="h-4 bg-gray-200 rounded w-full"></div>
+                      <div class="h-4 bg-gray-200 rounded w-full"></div>
+                      <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+                    </div>
+                    <div class="flex items-center justify-between mt-6">
+                      <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+                      <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </RecentPosts>
+  <List />
+</div>
