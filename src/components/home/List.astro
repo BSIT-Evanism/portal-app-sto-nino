@@ -1,9 +1,12 @@
 ---
 import type { DownloadableResourcesType } from "@/db/schema";
-import { fetchClient } from "@/lib/utils";
 
-const { data: downloadableResources } =
-  await fetchClient.api["downloadable-resources"].get();
+// const { data: downloadableResources } =
+//   await fetchClient.api["downloadable-resources"].get();
+
+const data = await fetch(Astro.url.origin + "/api/downloadable-resources");
+
+const downloadableResources = await data.json();
 
 const documents: DownloadableResourcesType[] = downloadableResources || [];
 ---
