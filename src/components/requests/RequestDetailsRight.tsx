@@ -201,7 +201,7 @@ export const RequestDetailsRight = ({ requestId, userId, isAdmin }: { requestId:
                                         {log.form && !isAdmin && (
                                             <RequestLogForm isAdmin={isAdmin} formLogId={log.form.id} requestId={request.request.id} requestLogId={log.id} docType={log.form.docType} logFormData={log.form} />
                                         )}
-                                        {(log.form.form && isAdmin) && (
+                                        {(log.type === 'form' && log.form.form && isAdmin) && (
                                             <div className="mt-4 space-y-4">
                                                 {log.form.form && Object.entries(log.form.form).map(([key, value]) => (
                                                     <div key={key} className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
