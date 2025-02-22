@@ -60,7 +60,7 @@ export default function CarouselComponent() {
     }, []);
 
     return (
-        <div className="relative overflow-hidden rounded-lg shadow-sm">
+        <div className="relative overflow-hidden shadow-sm">
             <div className='absolute z-10 top-5 left-5 bg-white text-black p-2 rounded-lg'>
                 Highlights {highlights?.length ? `(${highlights.length})` : ''}
             </div>
@@ -85,7 +85,7 @@ export default function CarouselComponent() {
                                         className="w-full h-[40vh] object-cover"
                                     />
                                 </a>
-                                <p className="text-center text-sm text-gray-500">{item.caption}</p>
+                                <p className="text-center text-sm text-gray-500 bg-white">{item.caption}</p>
                             </div>
                         )) : (
                             <div className="w-full h-[40vh] bg-gray-200 flex items-center justify-center">

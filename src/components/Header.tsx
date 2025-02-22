@@ -31,6 +31,13 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                                         </a>
                                     </NavigationMenuLink>
                                 </NavigationMenuItem>
+                                <NavigationMenuItem>
+                                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                                        <a href="/gallery">
+                                            Gallery
+                                        </a>
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
                                 {approved && (
                                     <NavigationMenuItem>
                                         <NavigationMenuTrigger>Services</NavigationMenuTrigger>

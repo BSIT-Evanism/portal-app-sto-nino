@@ -1,0 +1,30 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import images from "@/lib/images.json";
+import GalleryComp from "@/components/Gallery";
+
+import { Image } from "astro:assets";
+
+type ImageItem = {
+  id: number;
+  src: string;
+  title: string;
+};
+
+type SubCategory = {
+  name: string;
+  images: ImageItem[];
+};
+
+type GalleryData = {
+  [category: string]: {
+    subCategories: SubCategory[];
+  };
+};
+
+const galleryData: GalleryData = images;
+---
+
+<Layout title="Gallery">
+  <GalleryComp client:only="react" data={galleryData} />
+</Layout>
