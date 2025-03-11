@@ -12,12 +12,10 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
         <section className="w-full px-8 text-gray-700 bg-white">
             <div className="container flex flex-col flex-wrap items-center justify-between py-5 mx-auto md:flex-row max-w-7xl">
                 {/* Logo and Navigation Section */}
-                <div className="relative flex flex-col items-center md:flex-row md:w-full md:justify-center">
+                <div className="relative flex flex-col h-fit items-center md:flex-row md:w-full md:justify-center">
                     {/* Logo */}
                     <a href="/" className="flex items-center mb-5 font-medium text-gray-900 md:absolute md:left-0 md:mb-0">
-                        <span className="text-xl font-black leading-none text-teal-600 select-none">
-                            Barangay Sto. Niño<span className="text-indigo-600">.</span>
-                        </span>
+                        <img src="/brgy-logo.png" alt="Barangay Logo" className="h-20" />
                     </a>
 
                     {/* Main Navigation */}
