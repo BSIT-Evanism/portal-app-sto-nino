@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { downloadableContent, highlights, postContent, posts, priority, requests, requestUpdateForm, requestUpdates, sectionSequence, user } from "@/db/schema";
+import { brgyOfficerPosition, brgyOfficials, brgyPrograms, brgyStaff, downloadableContent, highlights, postContent, posts, priority, requests, requestUpdateForm, requestUpdates, sectionSequence, user, brgyEvents, brgyPromotionCategories, brgyPromotion } from "@/db/schema";
 import { generateId } from "@/lib/utils";
 import { utapi } from "@/utconfig/uploadthing";
 import { ActionError, defineAction, type ActionAPIContext } from "astro:actions";
@@ -634,6 +634,466 @@ export const admin = {
                 requestId: request.id
             }
         }
+    }),
+    addOfficers: defineAction({
+        accept: 'json',
+        input: z.object({
+            name: z.string(),
+            position: z.enum(brgyOfficerPosition.enumValues),
+            type: z.enum(['sk', 'main'])
+        }),
+        handler: async (input, context) => {
+            await authMiddleware(context)
+
+            if (input.type === 'sk') {
+
+                const officers = await db.query.brgyStaff.findMany({
+                    where: (table, { eq }) => eq(table.position, input.position)
+                })
+
+                if (input.position === 'chairman' || input.position === 'secretary' || input.position === 'treasurer') {
+                    if (officers.length > 0) {
+                        throw new ActionError({
+                            code: 'BAD_REQUEST',
+                            message: 'Position already has an officer'
+                        })
+                    }
+                }
+
+                const officerRes = await db.insert(brgyStaff).values({
+                    name: input.name,
+                    position: input.position,
+                }).returning()
+
+                if (!officerRes) {
+                    throw new ActionError({
+                        code: 'INTERNAL_SERVER_ERROR',
+                        message: 'Failed to add officer'
+                    })
+                }
+
+                return {
+                    success: true,
+                    officerId: officerRes[0].id
+                }
+            }
+
+            if (input.type === 'main') {
+
+                const officers = await db.query.brgyOfficials.findMany({
+                    where: (table, { eq }) => eq(table.position, input.position)
+                })
+
+                if (input.position === 'chairman' || input.position === 'secretary' || input.position === 'treasurer') {
+                    if (officers.length > 0) {
+                        throw new ActionError({
+                            code: 'BAD_REQUEST',
+                            message: 'Position already has an officer'
+                        })
+                    }
+                }
+
+
+                const officerRes = await db.insert(brgyOfficials).values({
+                    name: input.name,
+                    position: input.position,
+                }).returning()
+
+                if (!officerRes) {
+                    throw new ActionError({
+                        code: 'INTERNAL_SERVER_ERROR',
+                        message: 'Failed to add officer'
+                    })
+                }
+
+
+                return {
+                    success: true,
+                    officerId: officerRes[0].id
+                }
+
+            }
+
+            return
+
+        },
+    }),
+    updateOfficers: defineAction({
+        accept: 'json',
+        input: z.object({
+            officerId: z.number(),
+            name: z.string(),
+            position: z.enum(brgyOfficerPosition.enumValues),
+            type: z.enum(['sk', 'main'])
+        }),
+        handler: async (input, context) => {
+            await authMiddleware(context);
+
+            if (input.type === 'sk') {
+                // Check for unique chairman/secretary/treasurer
+                if (["chairman", "secretary", "treasurer"].includes(input.position)) {
+                    const officers = await db.query.brgyStaff.findMany({
+                        where: (table, { eq, and }) => and(
+                            eq(table.position, input.position),
+                            // Exclude the current officer being updated
+                            sql`id != ${input.officerId}`
+                        )
+                    });
+                    if (officers.length > 0) {
+                        throw new ActionError({
+                            code: 'BAD_REQUEST',
+                            message: 'Position already has an officer'
+                        });
+                    }
+                }
+                const [officer] = await db.update(brgyStaff).set({
+                    name: input.name,
+                    position: input.position
+                }).where(eq(brgyStaff.id, input.officerId)).returning();
+                if (!officer) {
+                    throw new ActionError({
+                        code: 'NOT_FOUND',
+                        message: 'Officer not found'
+                    });
+                }
+                return {
+                    success: true,
+                    officerId: officer.id
+                };
+            }
+            if (input.type === 'main') {
+                if (["chairman", "secretary", "treasurer"].includes(input.position)) {
+                    const officers = await db.query.brgyOfficials.findMany({
+                        where: (table, { eq, and }) => and(
+                            eq(table.position, input.position),
+                            sql`id != ${input.officerId}`
+                        )
+                    });
+                    if (officers.length > 0) {
+                        throw new ActionError({
+                            code: 'BAD_REQUEST',
+                            message: 'Position already has an officer'
+                        });
+                    }
+                }
+                const [officer] = await db.update(brgyOfficials).set({
+                    name: input.name,
+                    position: input.position
+                }).where(eq(brgyOfficials.id, input.officerId)).returning();
+                if (!officer) {
+                    throw new ActionError({
+                        code: 'NOT_FOUND',
+                        message: 'Officer not found'
+                    });
+                }
+                return {
+                    success: true,
+                    officerId: officer.id
+                };
+            }
+            return;
+        }
+    }),
+    deleteOfficer: defineAction({
+        accept: 'json',
+        input: z.object({
+            officerId: z.number(),
+            type: z.enum(['sk', 'main'])
+        }),
+        handler: async (input, context) => {
+            await authMiddleware(context)
+
+            if (input.type === 'sk') {
+                const [officer] = await db.delete(brgyStaff).where(eq(brgyStaff.id, input.officerId)).returning()
+                if (!officer) {
+                    throw new ActionError({
+                        code: 'NOT_FOUND',
+                        message: 'Officer not found'
+                    })
+                }
+            }
+
+            if (input.type === 'main') {
+                const [officer] = await db.delete(brgyOfficials).where(eq(brgyOfficials.id, input.officerId)).returning()
+                if (!officer) {
+                    throw new ActionError({
+                        code: 'NOT_FOUND',
+                        message: 'Officer not found'
+                    })
+                }
+            }
+
+
+            return {
+                success: true,
+                officerId: input.officerId
+            }
+
+        }
+    }),
+    addBrgyProgram: defineAction({
+        accept: 'form',
+        input: z.object({
+            name: z.string(),
+            description: z.string(),
+            image: z.instanceof(File)
+        }),
+        handler: async (input, context) => {
+            await authMiddleware(context)
+
+            const program = await db.transaction(async (tx) => {
+
+                const fileLink = await utapi.uploadFiles(new UTFile([input.image], input.image.name, { type: input.image.type }))
+
+                if (!fileLink.data) {
+                    throw new ActionError({
+                        code: 'INTERNAL_SERVER_ERROR',
+                        message: 'Failed to upload file'
+                    })
+                }
+
+                const [program] = await tx.insert(brgyPrograms).values({
+                    name: input.name,
+                    description: input.description,
+                    imageId: fileLink.data.key
+                }).returning()
+
+                if (!program) {
+                    throw new ActionError({
+                        code: 'INTERNAL_SERVER_ERROR',
+                        message: 'Failed to add program'
+                    })
+                }
+
+                return {
+                    success: true,
+                    programId: program.id
+                }
+            })
+
+            return program
+        }
+    }),
+    deleteBrgyProgram: defineAction({
+        accept: 'json',
+        input: z.object({
+            programId: z.number()
+        }),
+        handler: async (input, context) => {
+            await authMiddleware(context)
+
+            const [program] = await db.delete(brgyPrograms).where(eq(brgyPrograms.id, input.programId)).returning()
+
+            if (!program) {
+                throw new ActionError({
+                    code: 'NOT_FOUND',
+                    message: 'Program not found'
+                })
+            }
+
+            return {
+                success: true,
+                programId: program.id
+            }
+        }
+    }),
+    addBrgyEvent: defineAction({
+        accept: 'form',
+        input: z.object({
+            title: z.string(),
+            description: z.string(),
+            startDate: z.string(),
+            endDate: z.string(),
+        }),
+        handler: async (input, context) => {
+            await authMiddleware(context)
+
+            const [event] = await db.insert(brgyEvents).values({
+                title: input.title,
+                description: input.description,
+                startDate: new Date(input.startDate),
+                endDate: new Date(input.endDate),
+            }).returning()
+
+            if (!event) {
+                throw new ActionError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                    message: 'Failed to add event'
+                })
+            }
+
+            return {
+                success: true,
+                eventId: event.id
+            }
+        }
+    }),
+    deleteBrgyEvent: defineAction({
+        accept: 'json',
+        input: z.object({
+            eventId: z.number()
+        }),
+        handler: async (input, context) => {
+            await authMiddleware(context)
+
+            const [event] = await db.delete(brgyEvents).where(eq(brgyEvents.id, input.eventId)).returning()
+
+            if (!event) {
+                throw new ActionError({
+                    code: 'NOT_FOUND',
+                    message: 'Event not found'
+                })
+            }
+
+            return {
+                success: true,
+                eventId: event.id
+            }
+        }
+    }),
+    addPromotionCategory: defineAction({
+        accept: 'json',
+        input: z.object({
+            name: z.string().min(1, 'Category name is required'),
+        }),
+        handler: async (input, context) => {
+            if (!context.locals.user || context.locals.user.role !== 'admin') {
+                throw new ActionError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You must be an admin to add a category',
+                });
+            }
+            const [category] = await db.insert(brgyPromotionCategories).values({
+                name: input.name,
+            }).returning();
+            if (!category) {
+                throw new ActionError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                    message: 'Failed to add category',
+                });
+            }
+            return { success: true, category };
+        },
+    }),
+    deletePromotionCategory: defineAction({
+        accept: 'json',
+        input: z.object({
+            id: z.number(),
+        }),
+        handler: async (input, context) => {
+            if (!context.locals.user || context.locals.user.role !== 'admin') {
+                throw new ActionError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You must be an admin to delete a category',
+                });
+            }
+            const [deleted] = await db.delete(brgyPromotionCategories).where(eq(brgyPromotionCategories.id, input.id)).returning();
+            if (!deleted) {
+                throw new ActionError({
+                    code: 'NOT_FOUND',
+                    message: 'Category not found',
+                });
+            }
+            return { success: true, id: input.id };
+        },
+    }),
+    listPromotionCategories: defineAction({
+        accept: 'json',
+        input: z.object({}),
+        handler: async (_input, context) => {
+            if (!context.locals.user || context.locals.user.role !== 'admin') {
+                throw new ActionError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You must be an admin to view categories',
+                });
+            }
+            const categories = await db.select().from(brgyPromotionCategories).orderBy(brgyPromotionCategories.createdAt);
+            return { success: true, categories };
+        },
+    }),
+    addPromotion: defineAction({
+        accept: 'form',
+        input: z.object({
+            name: z.string(),
+            imageId: z.instanceof(File),
+            category: z.enum(['Properties', 'Resorts', 'Churches', 'Farms', 'Nature']),
+            address: z.string().optional(),
+            description: z.string().optional(),
+            coordinates: z.string().optional(),
+        }),
+        handler: async (input, context) => {
+            if (!context.locals.user || context.locals.user.role !== 'admin') {
+                throw new ActionError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You must be an admin to add a promotion',
+                });
+            }
+
+            const fileLink = await utapi.uploadFiles(new UTFile([input.imageId], input.imageId.name, { type: input.imageId.type }))
+
+            if (!fileLink.data) {
+                throw new ActionError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                    message: 'Failed to upload file'
+                })
+            }
+
+            const [promotion] = await db.insert(brgyPromotion).values({
+                name: input.name,
+                imageId: fileLink.data.key,
+                category: input.category as 'Properties' | 'Resorts' | 'Churches' | 'Farms' | 'Nature',
+                address: input.address,
+                description: input.description,
+                coordinates: input.coordinates,
+            }).returning();
+            if (!promotion) {
+                throw new ActionError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                    message: 'Failed to add promotion',
+                });
+            }
+            return { success: true, promotion };
+        },
+    }),
+    deletePromotion: defineAction({
+        accept: 'json',
+        input: z.object({
+            id: z.number(),
+        }),
+        handler: async (input, context) => {
+            await authMiddleware(context)
+
+
+            const [deleted] = await db.delete(brgyPromotion).where(eq(brgyPromotion.id, input.id)).returning();
+            if (!deleted) {
+                throw new ActionError({
+                    code: 'NOT_FOUND',
+                    message: 'Promotion not found',
+                });
+            }
+            const deletedImage = await utapi.deleteFiles([deleted.imageId])
+            if (!deletedImage) {
+                throw new ActionError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                    message: 'Failed to delete image',
+                });
+            }
+            return { success: true, id: input.id };
+        },
+    }),
+    listPromotions: defineAction({
+        accept: 'json',
+        input: z.object({}),
+        handler: async (_input, context) => {
+            if (!context.locals.user || context.locals.user.role !== 'admin') {
+                throw new ActionError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You must be an admin to view promotions',
+                });
+            }
+            const promotions = await db.select().from(brgyPromotion).orderBy(brgyPromotion.createdAt);
+            return { success: true, promotions };
+        },
     }),
 }
 

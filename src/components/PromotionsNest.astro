@@ -1,0 +1,128 @@
+---
+import { db } from "@/db";
+import type { BrgyPromotionType } from "@/db/schema";
+import { UFSImageUrl } from "@/lib/utils";
+const { category } = Astro.props;
+
+const categories = ["Properties", "Resorts", "Churches", "Farms", "Nature"];
+let promotions: BrgyPromotionType[] = [];
+if (!category) {
+    const allPromotions = await db.query.brgyPromotion.findMany({
+        orderBy: (brgyPromotion, { desc }) => [desc(brgyPromotion.createdAt)],
+    });
+    promotions = allPromotions;
+} else {
+    if (!categories.includes(category)) {
+        throw new Error("Invalid category");
+    }
+
+    const categorizedPromotions = await db.query.brgyPromotion.findMany({
+        orderBy: (brgyPromotion, { desc }) => [desc(brgyPromotion.createdAt)],
+        where: (brgyPromotion, { eq }) => eq(brgyPromotion.category, category),
+    });
+    promotions = categorizedPromotions;
+}
+---
+
+<div class="min-h-screen w-full bg-gradient-to-b from-gray-100 to-gray-700 p-8">
+    <h1 class="text-4xl font-bold text-center mb-8">{category}</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {
+            categories.map((category) => {
+                const filtered = promotions.filter(
+                    (promo) => promo.category === category,
+                );
+                if (filtered.length === 0) return null;
+                return (
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4 text-center">
+                            {category}
+                        </h2>
+                        <div class="flex flex-wrap justify-center gap-8">
+                            {filtered.map((promo) => (
+                                <div
+                                    class="bg-white rounded-lg shadow-lg overflow-hidden w-[350px] flex flex-col"
+                                    style="min-height: 500px;"
+                                >
+                                    <div class="relative h-56 w-full">
+                                        <img
+                                            src={UFSImageUrl(promo.imageId)}
+                                            alt={promo.description || category}
+                                            class="object-cover w-full h-full"
+                                        />
+                                        <div class="absolute right-4 bottom-4 bg-green-600 rounded-full p-2 cursor-pointer">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="2"
+                                                stroke="white"
+                                                class="w-6 h-6"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M9 5l7 7-7 7"
+                                                />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class=" flex-1 flex flex-col justify-between">
+                                        <a
+                                            href={`https://maps.google.com/?q=${promo.coordinates}`}
+                                            target="_blank"
+                                            class="flex items-center mb-2 p-6"
+                                        >
+                                            <svg
+                                                class="w-7 h-7 text-green-600 mr-2"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
+                                                />
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                                />
+                                            </svg>
+                                            <span class="text-lg">
+                                                {promo.address}
+                                            </span>
+                                        </a>
+                                        <div class="flex items-center mb-4 p-6">
+                                            <svg
+                                                class="w-7 h-7 text-green-600 mr-2"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+                                                />
+                                            </svg>
+                                            <span class="text-lg">
+                                                {promo.description}
+                                            </span>
+                                        </div>
+                                        <div class="bg-green-600 text-white text-2xl font-bold text-center py-3 rounded-b-lg mt-auto">
+                                            {promo.name || category + " Resort"}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            })
+        }
+    </div>
+</div>

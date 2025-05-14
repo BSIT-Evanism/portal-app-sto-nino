@@ -10,6 +10,8 @@ export type FamilyData = {
 
 export const postType = pgEnum("post_type", ["announcement", "news"]);
 
+export const brgyOfficerPosition = pgEnum("brgy_officer_position", ["chairman", "secretary", "treasurer", "councilor"]);
+
 export const user = pgTable("user", {
     id: text("id").primaryKey(),
     name: text('name').notNull(),
@@ -190,6 +192,61 @@ export const concernBoard = pgTable("concern_board", {
     createdAt: timestamp("created_at").notNull().defaultNow()
 })
 
+export const brgyPromotionCategories = pgTable("brgy_promotion_categories", {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow()
+})
+
+export const brgyPromotion = pgTable("brgy_promotion", {
+    id: serial("id").primaryKey(),
+    imageId: text("image_id").notNull(),
+    name: text("name").notNull(),
+    category: text("category", { enum: ['Properties', 'Resorts', 'Churches', 'Farms', 'Nature'] }),
+    address: text("address"),
+    description: text("description"),
+    coordinates: text("coordinates"),
+    createdAt: timestamp("created_at").notNull().defaultNow()
+})
+
+
+export const brgyPrograms = pgTable("brgy_programs", {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    imageId: text("image_id"),
+    description: text("description").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow()
+})
+
+export const brgyOfficials = pgTable("brgy_officials", {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    position: text("position", { enum: brgyOfficerPosition.enumValues }).notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow()
+})
+
+export const brgyStaff = pgTable("brgy_sk_officials", {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    position: text("position", { enum: brgyOfficerPosition.enumValues }).notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow()
+})
+
+
+export const brgyEvents = pgTable("brgy_events", {
+    id: serial("id").primaryKey(),
+    title: text("title").notNull(),
+    description: text("description").notNull(),
+    startDate: timestamp("start_date").notNull(),
+    endDate: timestamp("end_date").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow()
+})
+
+
+export const brgyPromotionCategoriesRelations = relations(brgyPromotionCategories, ({ many }) => ({
+    promotions: many(brgyPromotion)
+}))
+
 export const postRelations = relations(posts, ({ one }) => ({
     user: one(user, {
         fields: [posts.userId],
@@ -200,6 +257,7 @@ export const postRelations = relations(posts, ({ one }) => ({
         references: [priority.postId]
     })
 }))
+
 
 export const userRelations = relations(user, ({ many, one }) => ({
     posts: many(posts),
@@ -313,3 +371,7 @@ export type FormLog = typeof requestUpdateForm.$inferSelect
 export interface PriorityPostWithPost extends Omit<PriorityPost, 'id'> {
     post: Pick<Post, 'title'>
 }
+
+export type BrgyProgramType = typeof brgyPrograms.$inferSelect
+export type BrgyPromotionCategoryType = typeof brgyPromotionCategories.$inferSelect
+export type BrgyPromotionType = typeof brgyPromotion.$inferSelect

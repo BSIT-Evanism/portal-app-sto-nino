@@ -156,3 +156,11 @@ export const getUsers = db.query.user.findMany({
     limit: 5,
     offset: sql.placeholder('page'),
 }).prepare('getUsers')
+
+export const getBrgyPrograms = db.query.brgyPrograms.findMany().prepare('getBrgyPrograms')
+
+export const getBrgyEvents = db.query.brgyEvents.findMany({
+    orderBy: (table, { desc }) => desc(table.startDate),
+}).prepare('getBrgyEvents')
+
+// export const getMonthlyRequestCounts = 

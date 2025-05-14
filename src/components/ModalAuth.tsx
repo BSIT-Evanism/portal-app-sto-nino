@@ -34,15 +34,7 @@ export const ModalAuth = () => {
                 </DialogTrigger>
             </div>
 
-            <DialogContent className="max-w-md bg-slate-50 p-0">
-                {/* <button
-                    className="absolute right-4 top-4 p-2 rounded-full bg-white/80 backdrop-blur-sm text-gray-600 hover:text-gray-900 transition-colors"
-                    onClick={() => setIsOpen(false)}
-                >
-                    <X className="h-4 w-4" />
-                    <span className="sr-only">Close</span>
-                </button> */}
-
+            <DialogContent className="max-w-4xl bg-slate-50 p-0">
                 <div className="p-6">
                     <a href="/" className="flex items-center p-5 font-medium text-gray-900 md:mb-0">
                         <span className="text-xl font-black leading-none text-gray-900 select-none">

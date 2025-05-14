@@ -11,6 +11,9 @@ import { DownloadableTable } from "@/components/DownloadableTable";
 import { getPosts } from "@/db/queries";
 import PostsTableNest from "@/components/PostsTableNest.astro";
 import UserStatistics from "@/components/UserStatistics.astro";
+import AdminOfficers from "@/components/AdminOfficers";
+import BrgyPrograms from "@/components/BrgyPrograms";
+import { BrgyEventsTable } from "@/components/BrgyEventsTable";
 
 if (Astro.locals.user?.role !== "admin") {
   return Astro.redirect("/");
@@ -21,23 +24,32 @@ if (Astro.locals.user?.role !== "admin") {
   <main
     class="container bg-gradient-to-br from-slate-50 to-white max-w-full min-h-[calc(100vh-100px)] mx-auto p-8"
   >
-    <h1 class="text-3xl font-bold text-slate-800 mb-8">Admin Dashboard</h1>
-
+    <div class="flex items-center justify-between">
+      <h1 class="text-3xl font-bold text-slate-800 mb-8">Admin Dashboard</h1>
+      <a
+        href="/admin/promotions"
+        class="mb-4 bg-teal-600 text-white px-4 py-2 rounded-md"
+        >Click here to manage promotions</a
+      >
+    </div>
     <section class="grid gap-8 md:grid-cols-2">
       <UserStatistics server:defer>
-        <div slot="fallback" class="grid grid-cols-1 md:grid-cols-3 gap-4 p-6 bg-white rounded-2xl shadow-sm border border-slate-100">
+        <div
+          slot="fallback"
+          class="grid grid-cols-1 md:grid-cols-3 gap-4 p-6 bg-white rounded-2xl shadow-sm border border-slate-100"
+        >
           <div class="animate-pulse space-y-4 p-4">
             <div class="h-4 bg-slate-200 rounded w-1/2"></div>
             <div class="h-8 bg-slate-200 rounded-lg w-3/4"></div>
             <div class="h-2 bg-slate-200 rounded w-1/4 mt-2"></div>
           </div>
-          
+
           <div class="animate-pulse space-y-4 p-4">
             <div class="h-4 bg-slate-200 rounded w-1/2"></div>
             <div class="h-8 bg-slate-200 rounded-lg w-3/4"></div>
             <div class="h-2 bg-slate-200 rounded w-1/4 mt-2"></div>
           </div>
-          
+
           <div class="animate-pulse space-y-4 p-4">
             <div class="h-4 bg-slate-200 rounded w-1/2"></div>
             <div class="h-8 bg-slate-200 rounded-lg w-3/4"></div>
@@ -150,6 +162,24 @@ if (Astro.locals.user?.role !== "admin") {
         Add downloadable content here such as pdfs, documents, etc.
       </p>
       <DownloadableTable client:only="react" />
+    </div>
+
+    <div
+      class="rounded-2xl bg-white p-8 shadow-sm border border-slate-100 transition-all hover:shadow-md"
+    >
+      <AdminOfficers client:only="react" />
+    </div>
+
+    <div
+      class="rounded-2xl bg-white p-8 shadow-sm border border-slate-100 transition-all hover:shadow-md"
+    >
+      <BrgyPrograms client:only="react" />
+    </div>
+
+    <div
+      class="rounded-2xl bg-white p-8 shadow-sm border border-slate-100 transition-all hover:shadow-md"
+    >
+      <BrgyEventsTable client:only="react" />
     </div>
   </main>
 </Layout>

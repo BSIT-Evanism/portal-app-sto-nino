@@ -1,0 +1,24 @@
+---
+import PromotionsNest from "@/components/PromotionsNest.astro";
+import Layout from "@/layouts/Layout.astro";
+
+const { category } = Astro.params;
+---
+
+<Layout title="Promotions">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold">Promotions</h1>
+        <PromotionsNest category={category} server:defer>
+            <div
+                slot="fallback"
+                class="flex items-center justify-center min-h-[200px]"
+            >
+                <div
+                    class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent"
+                >
+                </div>
+                <span class="ml-3 text-lg text-gray-600">Loading...</span>
+            </div>
+        </PromotionsNest>
+    </div>
+</Layout>

@@ -1,11 +1,12 @@
 import { Elysia } from 'elysia';
 import { cache } from '../utils/cache';
-import { getConfig, getRecentPosts, getPriorityPosts, getPostContent, GetAllNews, GetAllAnnouncements } from '@/db/queries';
+import { getConfig, getRecentPosts, getPriorityPosts, getPostContent, GetAllNews, GetAllAnnouncements, getBrgyPrograms, getBrgyEvents } from '@/db/queries';
 import type { TTLType } from '../types';
 import { userMiddleware } from '../auth';
 import { db } from '@/db';
 import { posts } from '@/db/schema';
 import { and, eq } from 'drizzle-orm';
+import { brgyPromotion, brgyPromotionCategories } from '@/db/schema';
 
 const isBusinessHours = () => {
     const now = new Date();
@@ -133,5 +134,43 @@ export const feedRoutes = new Elysia()
                 security: [{ BearerAuth: [] }],
                 description: 'Invalidate the feed cache. Requires authentication.'
             }
+        })
+        .get('/feed/officers', async () => {
+            const officials = await db.query.brgyOfficials.findMany()
+            const skOfficers = await db.query.brgyStaff.findMany()
+
+            console.log('allOfficers', officials, skOfficers)
+
+            return {
+                officials: officials,
+                skOfficers: skOfficers
+            }
+        })
+        .get('/brgy-programs', async () => {
+            const programs = await getBrgyPrograms.execute();
+            return programs;
+        })
+        .get('/brgy-events', async () => {
+            const events = await getBrgyEvents.execute();
+            return events;
+        })
+        .get('/promotions', async () => {
+            const promotions = await db
+                .select({
+                    id: brgyPromotion.id,
+                    imageId: brgyPromotion.imageId,
+                    category: brgyPromotion.category,
+                    address: brgyPromotion.address,
+                    description: brgyPromotion.description,
+                    createdAt: brgyPromotion.createdAt,
+                })
+                .from(brgyPromotion)
+            return { success: true, promotions };
+        })
+        .get('/promotions/:id', async ({ params }) => {
+            const promotions = await db.query.brgyPromotion.findMany({
+                where: (table, { eq }) => eq(table.category, params.id as 'Properties' | 'Resorts' | 'Churches' | 'Farms' | 'Nature')
+            });
+            return { success: true, promotions };
         })
     );

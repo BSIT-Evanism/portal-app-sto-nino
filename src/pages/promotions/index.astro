@@ -1,0 +1,13 @@
+---
+import PromotionsNest from "@/components/PromotionsNest.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Promotions">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold">Promotions</h1>
+        <PromotionsNest server:defer>
+            <div slot="fallback">Loading...</div>
+        </PromotionsNest>
+    </div>
+</Layout>

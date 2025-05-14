@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge"
 import { treaty } from "@elysiajs/eden"
 import type { appClient } from "@/pages/[...slugs]"
 import axios from "axios"
+import { UPLOADTHING_APP_ID } from "astro:env/client"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -21,3 +22,8 @@ export const fetchClient = treaty<appClient>(import.meta.env.API_URL)
 export const fetcher = (url: string) => axios.get(url, {
   timeout: 10000,
 }).then(res => res.data)
+
+
+export function UFSImageUrl(imageId: string) {
+  return `https://${UPLOADTHING_APP_ID}.ufs.sh/f/${imageId}`;
+}

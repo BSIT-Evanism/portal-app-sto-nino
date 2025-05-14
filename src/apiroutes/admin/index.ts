@@ -3,8 +3,9 @@ import { getPosts, getAllRequests, getHighlights, getDownloadableResources, getL
 import { db } from '@/db';
 import { userMiddleware } from '../auth';
 import { bearer } from '@elysiajs/bearer'
-import { requests } from '@/db/schema';
+import { requests, brgyPromotionCategories } from '@/db/schema';
 import { cache } from '../utils/cache';
+import { eq } from 'drizzle-orm';
 
 export const adminRoutes = new Elysia()
     .use(bearer())
@@ -190,5 +191,26 @@ export const adminRoutes = new Elysia()
                     200: { description: 'Users retrieved successfully' }
                 }
             }
+        })
+        .get('/promotion-categories', async ({ user }) => {
+            if (!user || user.role !== 'admin') throw new Error('Unauthorized');
+            const categories = await db.select().from(brgyPromotionCategories).orderBy(brgyPromotionCategories.createdAt);
+            return { success: true, categories };
+        })
+        .post('/promotion-categories', async ({ user, body }) => {
+            if (!user || user.role !== 'admin') throw new Error('Unauthorized');
+            if (!body) throw new Error('No body provided');
+            const { name } = body;
+            if (!name) throw new Error('Name is required');
+            const [category] = await db.insert(brgyPromotionCategories).values({ name }).returning();
+            return { success: true, category };
+        })
+        .delete('/promotion-categories/:id', async ({ user, params }) => {
+            if (!user || user.role !== 'admin') throw new Error('Unauthorized');
+            const id = Number(params.id);
+            if (!id) throw new Error('ID is required');
+            const [deleted] = await db.delete(brgyPromotionCategories).where(eq(brgyPromotionCategories.id, id)).returning();
+            if (!deleted) throw new Error('Category not found');
+            return { success: true, id };
         })
     );

@@ -2,102 +2,65 @@ import { cn } from "@/lib/utils"
 import { ModalAuth } from "./ModalAuth"
 import { Signout } from "./Signout"
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "./ui/navigation-menu"
-import React from "react"
+import React, { useState } from "react"
+import useSWR from "swr"
 
 
 
 
 export const MainHeader = ({ role, pathname, approved, hasSession }: { role: string | null, pathname: string, approved: boolean, hasSession: boolean }) => {
+
     return (
-        <section className="w-full px-8 text-gray-700 bg-white">
-            <div className="container flex flex-col flex-wrap items-center justify-between py-5 mx-auto md:flex-row max-w-7xl">
-                {/* Logo and Navigation Section */}
-                <div className="relative flex flex-col h-fit items-center md:flex-row md:w-full md:justify-center">
-                    {/* Logo */}
-                    <a href="/" className="flex items-center mb-5 font-medium text-gray-900 md:absolute md:left-0 md:mb-0">
-                        <img src="/brgy-logo.png" alt="Barangay Logo" className="h-20" />
-                    </a>
+        <section className="w-full px-8 text-white bg-bg">
+            <div className="container flex flex-row items-center justify-between text-center py-5 mx-auto max-w-7xl">
+                {/* Logo */}
+                <a href="/" className="flex items-center font-medium text-gray-900 ">
+                    <img src="/brgy-logo.png" alt="Barangay Logo" className="h-20" />
+                </a>
 
-                    {/* Main Navigation */}
-                    <nav className="flex flex-wrap items-center justify-center mb-5 text-base md:mb-0">
-                        <NavigationMenu>
-                            <NavigationMenuList>
-                                <NavigationMenuItem>
-                                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                                        <a href="/">
-                                            Home
-                                        </a>
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
-                                <NavigationMenuItem>
-                                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                                        <a href="/gallery">
-                                            Gallery
-                                        </a>
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
-                                {approved && (
-                                    <NavigationMenuItem>
-                                        <NavigationMenuTrigger>Services</NavigationMenuTrigger>
-                                        <NavigationMenuContent className="flex flex-col gap-2 p-2">
-                                            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                                                <ListItem
-                                                    key={'/tickets'}
-
-                                                    title={'Tickets'}
-                                                    href={'/tickets'}
-                                                >
-                                                    View and manage requests/tickets
-                                                </ListItem>
-                                                <ListItem
-                                                    key={'/concern'}
-                                                    title={'Concern Board'}
-                                                    href={'/concern'}
-                                                >
-                                                    Submit concerns and feedback
-                                                </ListItem>
-                                            </ul>
-                                        </NavigationMenuContent>
-                                    </NavigationMenuItem>
-                                )}
-                                <NavigationMenuItem>
-                                    <NavigationMenuTrigger>Feed</NavigationMenuTrigger>
-                                    <NavigationMenuContent className="flex flex-col gap-2 p-2">
-                                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                                            <ListItem
-                                                key={'/news'}
-
-                                                title={'News'}
-                                                href={'/news'}
-                                            >
-                                                View all recent and old news here
-                                            </ListItem>
-                                            <ListItem
-                                                key={'/announcements'}
-                                                title={'Announcements'}
-                                                href={'/announcements'}
-                                            >
-                                                View all announcements here
-                                            </ListItem>
-                                        </ul>
-                                    </NavigationMenuContent>
-                                </NavigationMenuItem>
-                                {role === 'admin' && (
-                                    <NavigationMenuItem>
-                                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                                            <a href="/admin">
-                                                Admin
-                                            </a>
-                                        </NavigationMenuLink>
-                                    </NavigationMenuItem>
-                                )}
-                            </NavigationMenuList>
-                        </NavigationMenu>
-                    </nav>
-                </div>
+                {/* Main Navigation */}
+                <nav className="flex items-center text-center">
+                    <ul className="flex gap-8 text-lg font-bold">
+                        <a className="hover:underline px-4 py-2 text-center" href="/">Home</a>
+                        <li>
+                            <Dropdown label="About">
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/mission-vision">Mission and Vision</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/history">History</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/officials">Officials</a>
+                            </Dropdown>
+                        </li>
+                        {approved && (
+                            <li>
+                                <Dropdown label="Services">
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Tickets</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Concern Board</a>
+                                </Dropdown>
+                            </li>
+                        )}
+                        <li>
+                            <Dropdown label="Feed">
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/news">News</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/announcements">Announcements</a>
+                            </Dropdown>
+                        </li>
+                        <li>
+                            <Dropdown label="Promotions">
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions`}>All</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Properties`}>Properties</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Resorts`}>Resorts</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Churches`}>Churches</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Farms`}>Farms</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Nature`}>Nature</a>
+                            </Dropdown>
+                        </li>
+                        {role === 'admin' && (
+                            <a className="hover:underline px-4 py-2" href="/admin">Admin</a>
+                        )}
+                    </ul>
+                </nav>
 
                 {/* Auth Section */}
-                <div className="inline-flex items-center space-x-6 md:absolute md:right-8 md:top-5 mr-16">
+                <div className="flex items-center space-x-6">
                     {(!approved && hasSession) && (<div className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
                         <p>Please wait for approval - you have limited access to the portal</p>
                     </div>)}
@@ -155,4 +118,26 @@ const ListItem = React.forwardRef<
     )
 })
 ListItem.displayName = "ListItem"
+
+const Dropdown = ({ label, children }: { label: string, children: React.ReactNode }) => {
+    const [open, setOpen] = useState(false);
+    return (
+        <li className="relative">
+            <button
+                className="px-4 py-2 focus:outline-none text-lg font-bold flex items-center gap-2"
+                onClick={() => setOpen((o) => !o)}
+                onBlur={() => setTimeout(() => setOpen(false), 150)}
+                type="button"
+            >
+                {label}
+                <svg className={`w-4 h-4 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            {open && (
+                <div className="absolute left-0 mt-2 min-w-[220px] bg-white text-black rounded-lg shadow-lg z-20 border border-gray-200">
+                    {children}
+                </div>
+            )}
+        </li>
+    );
+};
 

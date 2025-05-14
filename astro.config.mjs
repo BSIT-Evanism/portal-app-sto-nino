@@ -20,7 +20,12 @@ export default defineConfig({
         context: 'server',
         access: 'secret',
         optional: false
-      })
+      }),
+      UPLOADTHING_APP_ID: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: false
+      }),
     }
   },
   integrations: [tailwind({

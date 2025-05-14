@@ -1,18 +1,19 @@
 ---
 import { db } from "@/db";
-import { requests, user } from "@/db/schema";
+import { requests, user, familyData } from "@/db/schema";
 import { Debug } from "astro:components";
 import { and, eq, ne, not, or } from "drizzle-orm";
 import { Component as ChartComp } from "./ChartComp";
+import { sql } from "drizzle-orm";
 
 const allRequests = await db.$count(requests);
 const pendingRequests = await db.$count(
   requests,
-  and(ne(requests.status, "rejected"), ne(requests.status, "approved"))
+  and(ne(requests.status, "rejected"), ne(requests.status, "approved")),
 );
 const doneRequests = await db.$count(
   requests,
-  or(eq(requests.status, "approved"), eq(requests.status, "rejected"))
+  or(eq(requests.status, "approved"), eq(requests.status, "rejected")),
 );
 const usersCount = await db.$count(user);
 const approvedUsersCount = await db.$count(user, eq(user.approved, true));
@@ -23,7 +24,58 @@ const totalUserWithFamily = await db.query.user.findMany({
   },
 });
 const usersWIthFamilyRegistered = totalUserWithFamily.filter(
-  (fam) => fam.family !== null || fam.details !== null
+  (fam) => fam.family !== null || fam.details !== null,
+);
+
+const monthlyRequests = await db.execute(sql`
+  SELECT 
+    EXTRACT(YEAR FROM created_at) AS year, 
+    EXTRACT(MONTH FROM created_at) AS month, 
+    COUNT(*) AS count
+  FROM requests
+  WHERE status IN ('approved', 'rejected')
+  GROUP BY year, month
+  ORDER BY year DESC, month DESC
+`);
+const rows = monthlyRequests.rows as {
+  year: string;
+  month: string;
+  count: string;
+}[];
+const latestMonth = rows.length > 0 ? rows[0] : undefined;
+console.log("Monthly Requests:", monthlyRequests.rows);
+
+// Fetch all family data to count family members
+const allFamilyData = await db.query.familyData.findMany();
+const totalFamilyMembers = allFamilyData.reduce(
+  (acc, fam) => acc + (fam.data?.length || 0),
+  0,
+);
+const totalResidents = usersCount + totalFamilyMembers;
+
+// Fetch all requests and their latest update for service hours
+const allRequestsWithUpdates = await db.query.requests.findMany({
+  with: {
+    updates: true,
+  },
+});
+
+function getServiceHours(request: any) {
+  if (!request.updates || request.updates.length === 0) return 0;
+  const created = new Date(request.createdAt);
+  // Find the latest update by createdAt
+  const latestUpdate = request.updates.reduce((latest: any, curr: any) => {
+    return new Date(curr.createdAt) > new Date(latest.createdAt)
+      ? curr
+      : latest;
+  }, request.updates[0]);
+  const latest = new Date(latestUpdate.createdAt);
+  // Return hours difference
+  return (latest.getTime() - created.getTime()) / (1000 * 60 * 60);
+}
+const totalServiceHours = allRequestsWithUpdates.reduce(
+  (acc, req) => acc + getServiceHours(req),
+  0,
 );
 ---
 
@@ -31,165 +83,211 @@ const usersWIthFamilyRegistered = totalUserWithFamily.filter(
   class="col-span-2 p-6 bg-white rounded-xl shadow-sm border border-slate-200 transition-all duration-200 hover:shadow-md space-y-6"
 >
   <h2 class="text-xl font-semibold text-slate-800 mb-6">System Statistics</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <!-- All Requests Card -->
-    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-slate-500">Total Requests</p>
-          <p class="text-2xl font-bold text-slate-800 mt-1">{allRequests}</p>
-        </div>
-        <div class="p-2 bg-blue-100 rounded-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 text-blue-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-            ></path>
-          </svg>
-        </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Total Requests Card -->
+    <div
+      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+    >
+      <div class="flex-1">
+        <div class="text-lg font-medium text-black mb-2">Total Request</div>
+        <div class="text-6xl font-bold text-green-700">{allRequests}</div>
+      </div>
+      <div>
+        <svg
+          class="w-16 h-16 text-green-700"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="none"
+        >
+          <path
+            d="M2 6a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm2 0v12h16V6H4zm4 4h8v2H8v-2zm0 4h5v2H8v-2z"
+          ></path>
+        </svg>
       </div>
     </div>
-
+    <!-- Monthly Requests Card -->
+    <div
+      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-blue-700 min-h-[170px]"
+    >
+      <div class="flex-1">
+        <div class="text-lg font-medium text-black mb-2">
+          Requests This Month
+        </div>
+        <div class="text-6xl font-bold text-blue-700">
+          {latestMonth ? latestMonth.count : 0}
+        </div>
+        <div class="text-sm text-slate-500 mt-2">
+          {
+            latestMonth
+              ? `${new Date(Number(latestMonth.year), Number(latestMonth.month) - 1).toLocaleString("default", { month: "long", year: "numeric" })}`
+              : ""
+          }
+        </div>
+      </div>
+      <div>
+        <svg
+          class="w-16 h-16 text-blue-700"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="none"
+        >
+          <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+    </div>
     <!-- Pending Requests Card -->
-    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-slate-500">Pending Requests</p>
-          <p class="text-2xl font-bold text-yellow-600 mt-1">
-            {pendingRequests}
-          </p>
-        </div>
-        <div class="p-2 bg-yellow-100 rounded-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 text-yellow-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </div>
+    <div
+      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+    >
+      <div class="flex-1">
+        <div class="text-lg font-medium text-black mb-2">Pending Request</div>
+        <div class="text-6xl font-bold text-green-700">{pendingRequests}</div>
+      </div>
+      <div>
+        <svg
+          class="w-16 h-16 text-green-700"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="none"
+        >
+          <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
       </div>
     </div>
-
-    <!-- Done Requests Card -->
-    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-slate-500">Completed Requests</p>
-          <p class="text-2xl font-bold text-green-600 mt-1">{doneRequests}</p>
-        </div>
-        <div class="p-2 bg-green-100 rounded-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 text-green-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </div>
+    <!-- Completed Requests Card -->
+    <div
+      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+    >
+      <div class="flex-1">
+        <div class="text-lg font-medium text-black mb-2">Completed Request</div>
+        <div class="text-6xl font-bold text-green-700">{doneRequests}</div>
+      </div>
+      <div>
+        <svg
+          class="w-16 h-16 text-green-700"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="none"
+        >
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
       </div>
     </div>
-
     <!-- Total Users Card -->
-    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-slate-500">Total Users</p>
-          <p class="text-2xl font-bold text-slate-800 mt-1">{usersCount}</p>
-        </div>
-        <div class="p-2 bg-purple-100 rounded-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 text-purple-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-            ></path>
-          </svg>
-        </div>
+    <div
+      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+    >
+      <div class="flex-1">
+        <div class="text-lg font-medium text-black mb-2">Total Users</div>
+        <div class="text-6xl font-bold text-green-700">{usersCount}</div>
+      </div>
+      <div>
+        <svg
+          class="w-16 h-16 text-green-700"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="none"
+        >
+          <path
+            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+          ></path>
+        </svg>
       </div>
     </div>
-
     <!-- Approved Users Card -->
-    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-slate-500">Approved Users</p>
-          <p class="text-2xl font-bold text-indigo-600 mt-1">
-            {approvedUsersCount}
-          </p>
-        </div>
-        <div class="p-2 bg-indigo-100 rounded-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 text-indigo-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-            ></path>
-          </svg>
+    <div
+      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+    >
+      <div class="flex-1">
+        <div class="text-lg font-medium text-black mb-2">Approved User</div>
+        <div class="text-6xl font-bold text-green-700">
+          {approvedUsersCount}
         </div>
       </div>
+      <div>
+        <svg
+          class="w-16 h-16 text-green-700"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="none"
+        >
+          <path
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+          ></path>
+        </svg>
+      </div>
     </div>
-    <!-- Total Users Card With Family Registered -->
-    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-slate-500">
-            Total Users With Family Registered
-          </p>
-          <p class="text-2xl font-bold text-indigo-600 mt-1">
-            {usersWIthFamilyRegistered.length}
-          </p>
+    <!-- Total Users With Family Registered Card -->
+    <div
+      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+    >
+      <div class="flex-1">
+        <div class="text-lg font-medium text-black mb-2">
+          Total Users With Family Registered
         </div>
-        <div class="p-2 bg-indigo-100 rounded-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 text-indigo-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-            ></path>
-          </svg>
+        <div class="text-6xl font-bold text-green-700">
+          {usersWIthFamilyRegistered.length}
         </div>
+      </div>
+      <div>
+        <svg
+          class="w-16 h-16 text-green-700"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="none"
+        >
+          <path
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+          ></path>
+        </svg>
+      </div>
+    </div>
+    <!-- Total Residents Card -->
+    <div
+      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-teal-700 min-h-[170px]"
+    >
+      <div class="flex-1">
+        <div class="text-lg font-medium text-black mb-2">Total Residents</div>
+        <div class="text-6xl font-bold text-teal-700">{totalResidents}</div>
+      </div>
+      <div>
+        <svg
+          class="w-16 h-16 text-teal-700"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="none"
+        >
+          <path
+            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+          ></path>
+        </svg>
+      </div>
+    </div>
+    <!-- Total Service Hours Card -->
+    <div
+      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-yellow-700 min-h-[170px]"
+    >
+      <div class="flex-1">
+        <div class="text-lg font-medium text-black mb-2">
+          Total Service Hours
+        </div>
+        <div class="text-6xl font-bold text-yellow-700">
+          {
+            totalServiceHours.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })
+          }
+        </div>
+      </div>
+      <div>
+        <svg
+          class="w-16 h-16 text-yellow-700"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="none"
+        >
+          <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
       </div>
     </div>
   </div>
