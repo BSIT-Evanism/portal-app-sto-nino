@@ -8,9 +8,12 @@ import OfficersDisplay from "../OfficersDisplay";
 import BrgyProgramsDisplay from "../BrgyProgramsDisplay";
 import BrgyEventsDisplay from "../BrgyEventsDisplay";
 import ExploreComp from "../ExploreComp.astro";
+import MissionVisionComp from "../MissionVisionComp.astro";
+import HistoryComp from "../HistoryComp.astro";
+import MapSection from "../MapSection.astro";
 ---
 
-<div class="w-full h-fit">
+<div class="w-full h-fit sequence-comp">
   <!-- <MarqueeNest /> -->
   <!-- Hero Section -->
   <section class="px-2 md:px-0 bg-bg h-screen w-full">
@@ -47,33 +50,10 @@ import ExploreComp from "../ExploreComp.astro";
   </section>
 
   <!-- Emergency Services Section -->
-  <section class="py-12 bg-white">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-8">Emergency Services</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-red-50 p-6 rounded-lg">
-          <h3 class="text-xl font-semibold text-red-600 mb-3">
-            Emergency Hotline
-          </h3>
-          <p class="text-2xl font-bold">123-456-7890</p>
-        </div>
-        <div class="bg-blue-50 p-6 rounded-lg">
-          <h3 class="text-xl font-semibold text-blue-600 mb-3">
-            Police Station
-          </h3>
-          <p class="text-2xl font-bold">123-456-7891</p>
-        </div>
-        <div class="bg-green-50 p-6 rounded-lg">
-          <h3 class="text-xl font-semibold text-green-600 mb-3">
-            Health Center
-          </h3>
-          <p class="text-2xl font-bold">123-456-7892</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <Carousel server:defer />
+  <MissionVisionComp />
+  <HistoryComp />
+  <!-- <Carousel server:defer /> -->
 
   <!-- Featured Services -->
   <!-- <section class="py-12 bg-gray-50">
@@ -151,6 +131,8 @@ import ExploreComp from "../ExploreComp.astro";
     </div>
   </section> -->
 
+  <OfficersDisplay client:only="react" />
+
   <List />
   <BrgyEventsDisplay client:only="react" />
   <BrgyProgramsDisplay client:only="react" />
@@ -226,136 +208,11 @@ import ExploreComp from "../ExploreComp.astro";
     </div>
   </section> -->
   <!-- Location and Contact Section -->
-  <section class="py-12 bg-gray-50">
-    <div id="contactSection" class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-8">Visit Our Office</h2>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        <div class="rounded-lg overflow-hidden shadow-lg">
-          <div class="mapouter h-[500px]">
-            <div class="gmap_canvas h-full">
-              <iframe
-                class="gmap_iframe w-full h-full"
-                frameborder="0"
-                scrolling="no"
-                marginheight="0"
-                marginwidth="0"
-                src="https://maps.google.com/maps?width=600&height=400&hl=en&q=13.95892° N, 121.20865° E&t=&z=14&ie=UTF8&iwloc=B&output=embed"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-8">
-          <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h3 class="text-2xl font-semibold text-gray-800 mb-6">
-              Location Details
-            </h3>
-            <div class="space-y-4">
-              <div class="flex items-start space-x-4">
-                <div class="text-teal-600">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    ></path>
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h4 class="font-semibold text-gray-700">Address</h4>
-                  <p class="text-gray-600">Barangay Sto. Niño, Lipa City</p>
-                  <p class="text-gray-600">Batangas, Philippines</p>
-                </div>
-              </div>
-
-              <div class="flex items-start space-x-4">
-                <div class="text-teal-600">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h4 class="font-semibold text-gray-700">Office Hours</h4>
-                  <p class="text-gray-600">
-                    Monday - Friday: 8:00 AM - 5:00 PM
-                  </p>
-                  <p class="text-gray-600">Saturday: 8:00 AM - 12:00 PM</p>
-                </div>
-              </div>
-
-              <div class="flex items-start space-x-4">
-                <div class="text-teal-600">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    ></path>
-                  </svg>
-                </div>
-                <div>
-                  <h4 class="font-semibold text-gray-700">Contact Numbers</h4>
-                  <p class="text-gray-600">Office: (123) 456-7890</p>
-                  <p class="text-gray-600">Mobile: +63 912 345 6789</p>
-                </div>
-              </div>
-
-              <div class="flex items-start space-x-4">
-                <div class="text-teal-600">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    ></path>
-                  </svg>
-                </div>
-                <div>
-                  <h4 class="font-semibold text-gray-700">Email</h4>
-                  <p class="text-gray-600">info@brgysonino.gov.ph</p>
-                  <p class="text-gray-600">concerns@brgysonino.gov.ph</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <MapSection />
 </div>
+
+<style>
+  .sequence-comp {
+    overflow-x: hidden;
+  }
+</style>

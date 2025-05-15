@@ -3,14 +3,18 @@
 ---
 
 <div
-    class="min-h-screen w-full bg-gradient-to-b from-gray-200 to-black flex flex-col items-center py-10"
+    class="min-h-screen w-full bg-gradient-to-b from-gray-200 to-black flex flex-col items-center py-6 sm:py-10"
 >
-    <h2 class="text-4xl font-bold mb-12 text-black">Explore</h2>
+    <h2 class="text-2xl sm:text-4xl font-bold mb-8 sm:mb-12 text-black">
+        Explore
+    </h2>
     <!-- Top Row: 3 cards evenly spaced -->
-    <div class="flex flex-row justify-center gap-x-12 w-full max-w-6xl mb-10">
-        <div class="flex justify-center flex-1">
+    <div
+        class="flex flex-col md:flex-row justify-center gap-y-6 md:gap-y-0 md:gap-x-12 w-full max-w-6xl mb-8 md:mb-10"
+    >
+        <div class="flex justify-center flex-1 mb-6 md:mb-0">
             <div
-                class="bg-white rounded shadow-md w-80 h-60 flex flex-col items-center justify-center relative"
+                class="bg-white rounded shadow-md w-72 sm:w-80 h-56 sm:h-60 flex flex-col items-center justify-center relative"
             >
                 <div
                     class="absolute left-0 top-0 h-full w-2 bg-green-700 rounded-l"
@@ -21,10 +25,12 @@
                         <img
                             src="/properties-logo.png"
                             alt="Brgy. Properties"
-                            class="w-20 h-20"
+                            class="w-16 sm:w-20 h-16 sm:h-20"
                         />
                     </div>
-                    <div class="text-green-700 text-2xl font-bold mb-2">
+                    <div
+                        class="text-green-700 text-xl sm:text-2xl font-bold mb-2"
+                    >
                         Brgy. Properties
                     </div>
                     <a
@@ -35,9 +41,9 @@
                 </div>
             </div>
         </div>
-        <div class="flex justify-center flex-1">
+        <div class="flex justify-center flex-1 mb-6 md:mb-0">
             <div
-                class="bg-white rounded shadow-md w-80 h-60 flex flex-col items-center justify-center relative"
+                class="bg-white rounded shadow-md w-72 sm:w-80 h-56 sm:h-60 flex flex-col items-center justify-center relative"
             >
                 <div
                     class="absolute left-0 top-0 h-full w-2 bg-green-700 rounded-l"
@@ -48,10 +54,12 @@
                         <img
                             src="/farm-logo.png"
                             alt="Farms"
-                            class="w-20 h-20"
+                            class="w-16 sm:w-20 h-16 sm:h-20"
                         />
                     </div>
-                    <div class="text-green-700 text-2xl font-bold mb-2">
+                    <div
+                        class="text-green-700 text-xl sm:text-2xl font-bold mb-2"
+                    >
                         Farms
                     </div>
                     <a
@@ -64,7 +72,7 @@
         </div>
         <div class="flex justify-center flex-1">
             <div
-                class="bg-white rounded shadow-md w-80 h-60 flex flex-col items-center justify-center relative"
+                class="bg-white rounded shadow-md w-72 sm:w-80 h-56 sm:h-60 flex flex-col items-center justify-center relative"
             >
                 <div
                     class="absolute left-0 top-0 h-full w-2 bg-green-700 rounded-l"
@@ -75,10 +83,12 @@
                         <img
                             src="/resort-logo.png"
                             alt="Resorts"
-                            class="w-20 h-20"
+                            class="w-16 sm:w-20 h-16 sm:h-20"
                         />
                     </div>
-                    <div class="text-green-700 text-2xl font-bold mb-2">
+                    <div
+                        class="text-green-700 text-xl sm:text-2xl font-bold mb-2"
+                    >
                         Resorts
                     </div>
                     <a
@@ -91,11 +101,13 @@
         </div>
     </div>
     <!-- Bottom Row: 2 cards centered and evenly spaced -->
-    <div class="flex flex-row justify-center gap-x-12 w-full max-w-4xl">
-        <div class="flex justify-center flex-1"></div>
-        <div class="flex justify-center flex-1">
+    <div
+        class="flex flex-col md:flex-row justify-center gap-y-6 md:gap-y-0 md:gap-x-12 w-full max-w-4xl"
+    >
+        <div class="flex justify-center flex-1 order-1 md:order-none"></div>
+        <div class="flex justify-center flex-1 mb-6 md:mb-0">
             <div
-                class="bg-white rounded shadow-md w-80 h-60 flex flex-col items-center justify-center relative"
+                class="bg-white rounded shadow-md w-72 sm:w-80 h-56 sm:h-60 flex flex-col items-center justify-center relative"
             >
                 <div
                     class="absolute left-0 top-0 h-full w-2 bg-green-700 rounded-l"
@@ -106,10 +118,12 @@
                         <img
                             src="/school-logo.png"
                             alt="School"
-                            class="w-20 h-20"
+                            class="w-16 sm:w-20 h-16 sm:h-20"
                         />
                     </div>
-                    <div class="text-green-700 text-2xl font-bold mb-2">
+                    <div
+                        class="text-green-700 text-xl sm:text-2xl font-bold mb-2"
+                    >
                         School
                     </div>
                     <a
@@ -122,7 +136,7 @@
         </div>
         <div class="flex justify-center flex-1">
             <div
-                class="bg-white rounded shadow-md w-80 h-60 flex flex-col items-center justify-center relative"
+                class="bg-white rounded shadow-md w-72 sm:w-80 h-56 sm:h-60 flex flex-col items-center justify-center relative"
             >
                 <div
                     class="absolute left-0 top-0 h-full w-2 bg-green-700 rounded-l"
@@ -133,10 +147,12 @@
                         <img
                             src="/church-logo.png"
                             alt="Sto. Niño Churches"
-                            class="w-20 h-20"
+                            class="w-16 sm:w-20 h-16 sm:h-20"
                         />
                     </div>
-                    <div class="text-green-700 text-2xl font-bold mb-2">
+                    <div
+                        class="text-green-700 text-xl sm:text-2xl font-bold mb-2"
+                    >
                         Sto. Niño Churches
                     </div>
                     <a
@@ -147,6 +163,6 @@
                 </div>
             </div>
         </div>
-        <div class="flex justify-center flex-1"></div>
+        <div class="flex justify-center flex-1 order-2 md:order-none"></div>
     </div>
 </div>

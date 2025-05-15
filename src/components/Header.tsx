@@ -4,12 +4,13 @@ import { Signout } from "./Signout"
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "./ui/navigation-menu"
 import React, { useState } from "react"
 import useSWR from "swr"
+import { Menu } from "lucide-react"
+import { Drawer, DrawerTrigger, DrawerContent } from "./ui/drawer"
 
 
 
 
 export const MainHeader = ({ role, pathname, approved, hasSession }: { role: string | null, pathname: string, approved: boolean, hasSession: boolean }) => {
-
     return (
         <section className="w-full px-8 text-white bg-bg">
             <div className="container flex flex-row items-center justify-between text-center py-5 mx-auto max-w-7xl">
@@ -18,8 +19,59 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                     <img src="/brgy-logo.png" alt="Barangay Logo" className="h-20" />
                 </a>
 
-                {/* Main Navigation */}
-                <nav className="flex items-center text-center">
+                {/* Hamburger for mobile */}
+                <div className="md:hidden">
+                    <Drawer>
+                        <DrawerTrigger asChild>
+                            <button aria-label="Open menu">
+                                <Menu className="w-8 h-8 text-white" />
+                            </button>
+                        </DrawerTrigger>
+                        <DrawerContent>
+                            <nav className="flex flex-col gap-2 p-6 text-black">
+                                <a className="hover:underline px-4 py-2 text-center" href="/">Home</a>
+                                <Dropdown label="About">
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/mission-vision">Mission and Vision</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/history">History</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/officials">Officials</a>
+                                </Dropdown>
+                                {approved && (
+                                    <Dropdown label="Services">
+                                        <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Tickets</a>
+                                        <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Concern Board</a>
+                                    </Dropdown>
+                                )}
+                                <Dropdown label="Feed">
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/news">News</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/announcements">Announcements</a>
+                                </Dropdown>
+                                <Dropdown label="Promotions">
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions`}>All</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Properties`}>Properties</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Resorts`}>Resorts</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Churches`}>Churches</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Farms`}>Farms</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Nature`}>Nature</a>
+                                </Dropdown>
+                                <Dropdown label="Contact Us">
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/contact-us">Contact Us</a>
+                                </Dropdown>
+                                {role === 'admin' && (
+                                    <a className="hover:underline px-4 py-2" href="/admin">Admin</a>
+                                )}
+                                <div className="mt-4">
+                                    {(!approved && hasSession) && (<div className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full mb-2">
+                                        <p>Please wait for approval - you have limited access to the portal</p>
+                                    </div>)}
+                                    {role !== null ? <Signout /> : <ModalAuth />}
+                                </div>
+                            </nav>
+                        </DrawerContent>
+                    </Drawer>
+                </div>
+
+                {/* Main Navigation (desktop) */}
+                <nav className="hidden md:flex items-center text-center">
                     <ul className="flex gap-8 text-lg font-bold">
                         <a className="hover:underline px-4 py-2 text-center" href="/">Home</a>
                         <li>
@@ -53,14 +105,19 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Nature`}>Nature</a>
                             </Dropdown>
                         </li>
+                        <li>
+                            <Dropdown label="Contact Us">
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/contact-us">Contact Us</a>
+                            </Dropdown>
+                        </li>
                         {role === 'admin' && (
                             <a className="hover:underline px-4 py-2" href="/admin">Admin</a>
                         )}
                     </ul>
                 </nav>
 
-                {/* Auth Section */}
-                <div className="flex items-center space-x-6">
+                {/* Auth Section (desktop) */}
+                <div className="hidden md:flex items-center space-x-6">
                     {(!approved && hasSession) && (<div className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
                         <p>Please wait for approval - you have limited access to the portal</p>
                     </div>)}

@@ -1,14 +1,14 @@
 import useSWR from 'swr';
-import { fetcher } from '@/lib/utils';
+import { cn, fetcher } from '@/lib/utils';
 
 function getStatus(startDate: string, endDate: string) {
     const now = new Date();
     const start = new Date(startDate);
     const end = new Date(endDate);
     end.setDate(end.getDate() + 1); // Make end date inclusive
-    if (now < start) return { label: 'Upcoming', color: 'blue' };
-    if (now >= start && now < end) return { label: 'Ongoing', color: 'green' };
-    return { label: 'Ended', color: 'red' };
+    if (now < start) return { label: 'Upcoming', color: 'bg-green-500' };
+    if (now >= start && now < end) return { label: 'Ongoing', color: 'bg-green-500' };
+    return { label: 'Ended', color: 'bg-green-500' };
 }
 
 export default function BrgyEventsDisplay() {
@@ -34,12 +34,12 @@ export default function BrgyEventsDisplay() {
                                     <span className="font-semibold">End:</span> {new Date(event.endDate).toLocaleString()}
                                 </div>
                                 <div className="flex justify-center mt-2">
-                                    <span className={`px-3 py-1 rounded-full text-white bg-${status.color}-500 font-semibold text-xs`}>
+                                    <span className={cn("px-3 py-1 rounded-full text-white font-semibold text-xs", status.color)}>
                                         {status.label}
                                     </span>
                                 </div>
                             </div>
-                            <div className={`h-3 w-full mt-auto bg-${status.color}-500`} />
+                            <div className={cn("h-3 w-full mt-auto", status.color)} />
                         </div>
                     );
                 })}

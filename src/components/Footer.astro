@@ -1,152 +1,62 @@
-<footer class="bg-white">
-  <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-    <div class="lg:grid lg:grid-cols-2">
-      <div
-        class="border-b border-gray-100 py-8 lg:order-last lg:border-s lg:border-b-0 lg:py-16 lg:ps-16"
-      >
-        <div class="block text-teal-600 lg:hidden">
-          <svg
-            width="200"
-            height="200"
-            viewBox="0 0 200 200"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <title>Barangay Portal System Logo</title>
-            <desc>A logo representing a Barangay Portal System.</desc>
+---
 
-            <path
-              d="M100 20L50 70H150Z"
-              fill="#28a745"
-              stroke="#28a745"
-              stroke-width="5"
-              stroke-linejoin="round"></path>
-            <rect
-              x="75"
-              y="70"
-              width="50"
-              height="50"
-              fill="#f8f9fa"
-              stroke="#28a745"
-              stroke-width="5"></rect>
-            <rect x="90" y="90" width="20" height="30" fill="#28a745"></rect>
-            <circle
-              cx="100"
-              cy="150"
-              r="25"
-              fill="#007bff"
-              stroke="#007bff"
-              stroke-width="5"></circle>
-            <path
-              d="M100 125L100 175"
-              stroke="#f8f9fa"
-              stroke-width="5"
-              stroke-linecap="round"></path>
-            <path
-              d="M75 150L125 150"
-              stroke="#f8f9fa"
-              stroke-width="5"
-              stroke-linecap="round"></path>
-          </svg>
-        </div>
+---
+
+<footer class="bg-gradient-to-b from-green-500 to-black text-white">
+  <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+      <!-- Logo and Barangay Name -->
+      <div class="flex flex-col items-center md:items-start">
+        <img
+          src="/brgy-logo.png"
+          alt="Barangay Sto. Niño Logo"
+          class="w-16 h-16 mb-2 rounded-full border-2 border-white"
+        />
+        <h2 class="text-lg font-bold">Barangay Sto. Niño</h2>
       </div>
-
-      <div class="py-8 lg:py-16 lg:pe-16">
-        <div class="hidden text-teal-600 lg:block">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819"
-            ></path>
-          </svg>
-          <h1 class="font-bold">Barangay Sto. Niño Portal</h1>
-        </div>
-
-        <div class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-3">
-          <div>
-            <p class="font-medium text-gray-900">Barangay Services</p>
-
-            <ul class="mt-6 space-y-4 text-sm">
-              <li>
-                <a
-                  href="/tickets"
-                  class="text-gray-700 transition hover:opacity-75"
-                >
-                  Request Barangay Clearance
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="/tickets"
-                  class="text-gray-700 transition hover:opacity-75"
-                >
-                  Apply for Permits
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="/about/mission-vision"
-                  class="text-gray-700 transition hover:opacity-75"
-                >
-                  View Barangay Ordinances
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="/concern"
-                  class="text-gray-700 transition hover:opacity-75"
-                >
-                  Report an Incident
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <p class="font-medium text-gray-900">About Us</p>
-
-            <ul class="mt-6 space-y-4 text-sm">
-              <li>
-                <a
-                  href="/about/officials"
-                  class="text-gray-700 transition hover:opacity-75"
-                >
-                  Barangay Officials
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="/about/history"
-                  class="text-gray-700 transition hover:opacity-75"
-                >
-                  Barangay History
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="/#contactSection"
-                  class="text-gray-700 transition hover:opacity-75"
-                >
-                  Contact Us
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
+      <!-- About Us -->
+      <div class="flex flex-col items-center">
+        <h3 class="font-semibold mb-2">About Us</h3>
+        <p class="text-center text-sm max-w-xs">
+          Barangay Sto. Niño Lipa City, Batangas: Your online resource for
+          community information and services.
+        </p>
       </div>
+      <!-- Contact Us -->
+      <div class="flex flex-col items-center md:items-end">
+        <h3 class="font-semibold mb-2">Contact Us</h3>
+        <p class="text-sm text-right">
+          DOST S & T Complex, Sudlon, Lahug, Cebu City, Philippines<br />
+          <br />
+          Landline: +63 32 239-1474<br />
+          Phone Number: +63 32 417-3514<br />
+          Email: admin@iishare.com.ph
+        </p>
+      </div>
+    </div>
+    <!-- Bottom Row -->
+    <div
+      class="mt-8 flex flex-col md:flex-row items-center justify-between border-t border-white/20 pt-4"
+    >
+      <p class="text-sm">Copyright © 2025. All rights reserved.</p>
+      {
+        !Astro.locals.session && (
+          <div class="mt-2 md:mt-0 flex gap-2 bg-white rounded-full">
+            <button
+              onclick="window.dispatchEvent(new CustomEvent('open-auth-modal', { detail: { mode: 'signin' } }))"
+              class="bg-slate-100 text-green-700 px-4 py-1 rounded-full font-medium hover:bg-gray-100 transition"
+            >
+              Log in
+            </button>
+            <button
+              onclick="window.dispatchEvent(new CustomEvent('open-auth-modal', { detail: { mode: 'signup' } }))"
+              class="bg-white text-green-700 px-4 py-1 rounded-full font-medium hover:bg-gray-100 transition"
+            >
+              Register
+            </button>
+          </div>
+        )
+      }
     </div>
   </div>
 </footer>
