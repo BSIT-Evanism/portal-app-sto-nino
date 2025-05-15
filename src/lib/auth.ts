@@ -1,8 +1,9 @@
 import { betterAuth } from "better-auth";
-import { BETTER_AUTH_SECRET } from "astro:env/server";
+import { BETTER_AUTH_SECRET, SENDGRID_EMAIL } from "astro:env/server";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
+import { transporter } from "./email";
 export const auth = betterAuth({
     secret: BETTER_AUTH_SECRET,
     database: drizzleAdapter(db, {
@@ -11,6 +12,15 @@ export const auth = betterAuth({
     }),
     emailAndPassword: {
         enabled: true,
+        sendResetPassword: async ({ user, url }) => {
+            const html = `<p>Click <a href="${url}">here</a> to reset your password.</p>`;
+            await transporter.sendMail({
+                from: SENDGRID_EMAIL,
+                to: user.email,
+                subject: 'Reset Password',
+                html
+            });
+        }
     },
     user: {
         additionalFields: {

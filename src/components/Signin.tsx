@@ -9,6 +9,7 @@ export const Signin = () => {
     const [password, setPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState("")
+    const [isForgotPassword, setIsForgotPassword] = useState(false)
 
     const handleSignin = async () => {
         const { data, error } = await authClient.signIn.email({
@@ -19,6 +20,19 @@ export const Signin = () => {
             setError(error.message || "An error occurred")
         } else {
             window.location.href = "/";
+        }
+    }
+
+    const handleForgotPassword = async () => {
+        const { data, error } = await authClient.forgetPassword({
+            email: email,
+            redirectTo: "/reset-password"
+        })
+
+        if (error) {
+            setError(error.message || "An error occurred")
+        } else {
+            setIsForgotPassword(true)
         }
     }
 
@@ -64,8 +78,9 @@ export const Signin = () => {
                         )}
                     </button>
                     <div className="flex justify-end mt-1">
-                        <a href="/forgot-password" className="text-green-700 text-xs hover:underline">Forgot Password?</a>
+                        <button onClick={handleForgotPassword} className="text-green-700 text-xs hover:underline">Forgot Password?</button>
                     </div>
+                    {isForgotPassword && <p className="text-green-700 text-xs hover:underline">Check your email for a link to reset your password.</p>}
                 </div>
                 {error && <p className="text-red-500 text-center">{error}</p>}
                 <button
