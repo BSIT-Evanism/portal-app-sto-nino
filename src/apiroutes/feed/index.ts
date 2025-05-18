@@ -158,7 +158,7 @@ export const feedRoutes = new Elysia()
             const promotions = await db
                 .select({
                     id: brgyPromotion.id,
-                    imageId: brgyPromotion.imageId,
+                    imageIdCarousel: brgyPromotion.imageIdCarousel,
                     category: brgyPromotion.category,
                     address: brgyPromotion.address,
                     description: brgyPromotion.description,

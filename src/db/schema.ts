@@ -200,7 +200,7 @@ export const brgyPromotionCategories = pgTable("brgy_promotion_categories", {
 
 export const brgyPromotion = pgTable("brgy_promotion", {
     id: serial("id").primaryKey(),
-    imageId: text("image_id").notNull(),
+    imageIdCarousel: text("image_id_carousel").array().notNull(),
     name: text("name").notNull(),
     category: text("category", { enum: ['Properties', 'Resorts', 'Churches', 'Farms', 'Nature'] }),
     address: text("address"),
@@ -242,10 +242,6 @@ export const brgyEvents = pgTable("brgy_events", {
     createdAt: timestamp("created_at").notNull().defaultNow()
 })
 
-
-export const brgyPromotionCategoriesRelations = relations(brgyPromotionCategories, ({ many }) => ({
-    promotions: many(brgyPromotion)
-}))
 
 export const postRelations = relations(posts, ({ one }) => ({
     user: one(user, {

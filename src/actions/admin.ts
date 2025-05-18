@@ -1015,7 +1015,7 @@ export const admin = {
         accept: 'form',
         input: z.object({
             name: z.string(),
-            imageId: z.instanceof(File),
+            imageId: z.instanceof(File).array(),
             category: z.enum(['Properties', 'Resorts', 'Churches', 'Farms', 'Nature']),
             address: z.string().optional(),
             description: z.string().optional(),
@@ -1029,9 +1029,9 @@ export const admin = {
                 });
             }
 
-            const fileLink = await utapi.uploadFiles(new UTFile([input.imageId], input.imageId.name, { type: input.imageId.type }))
+            const fileLink = await utapi.uploadFiles(input.imageId)
 
-            if (!fileLink.data) {
+            if (!fileLink.some(f => f.data)) {
                 throw new ActionError({
                     code: 'INTERNAL_SERVER_ERROR',
                     message: 'Failed to upload file'
@@ -1040,7 +1040,7 @@ export const admin = {
 
             const [promotion] = await db.insert(brgyPromotion).values({
                 name: input.name,
-                imageId: fileLink.data.key,
+                imageIdCarousel: fileLink.map(f => f.data?.key).filter(Boolean) as string[],
                 category: input.category as 'Properties' | 'Resorts' | 'Churches' | 'Farms' | 'Nature',
                 address: input.address,
                 description: input.description,
@@ -1071,7 +1071,7 @@ export const admin = {
                     message: 'Promotion not found',
                 });
             }
-            const deletedImage = await utapi.deleteFiles([deleted.imageId])
+            const deletedImage = await utapi.deleteFiles(deleted.imageIdCarousel)
             if (!deletedImage) {
                 throw new ActionError({
                     code: 'INTERNAL_SERVER_ERROR',

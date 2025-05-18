@@ -26,108 +26,307 @@ if (!category) {
 
 <div class="min-h-screen w-full bg-gradient-to-b from-gray-100 to-gray-700 p-8">
     <h1 class="text-4xl font-bold text-center mb-8">{category}</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"
+    >
         {
-            categories.map((category) => {
-                const filtered = promotions.filter(
-                    (promo) => promo.category === category,
-                );
-                if (filtered.length === 0 && Astro.props.category === category)
-                    return (
-                        <div class="text-gray-500 italic text-center p-4">
-                            No {category.toLowerCase()} available at this time
-                        </div>
-                    );
-                return (
-                    <div>
-                        <h2 class="text-2xl font-bold mb-4 text-center">
-                            {category}
-                        </h2>
-                        <div class="flex flex-wrap justify-center gap-8">
-                            {filtered.map((promo) => (
-                                <div
-                                    class="bg-white rounded-lg shadow-lg overflow-hidden w-[350px] flex flex-col"
-                                    style="min-height: 500px;"
-                                >
-                                    <div class="relative h-56 w-full">
-                                        <img
-                                            src={UFSImageUrl(promo.imageId)}
-                                            alt={promo.description || category}
-                                            class="object-cover w-full h-full"
-                                        />
-                                        <div class="absolute right-4 bottom-4 bg-green-600 rounded-full p-2 cursor-pointer">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke-width="2"
-                                                stroke="white"
-                                                class="w-6 h-6"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    d="M9 5l7 7-7 7"
-                                                />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class=" flex-1 flex flex-col justify-between">
-                                        <a
-                                            href={`https://maps.google.com/?q=${promo.coordinates}`}
-                                            target="_blank"
-                                            class="flex items-center mb-2 p-6"
-                                        >
-                                            <svg
-                                                class="w-7 h-7 text-green-600 mr-2"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="2"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
-                                                />
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                                                />
-                                            </svg>
-                                            <span class="text-lg">
-                                                {promo.address}
-                                            </span>
-                                        </a>
-                                        <div class="flex items-center mb-4 p-6">
-                                            <svg
-                                                class="w-7 h-7 text-green-600 mr-2"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="2"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
-                                                />
-                                            </svg>
-                                            <span class="text-lg">
-                                                {promo.description}
-                                            </span>
-                                        </div>
-                                        <div class="bg-green-600 text-white text-2xl font-bold text-center py-3 rounded-b-lg mt-auto">
-                                            {promo.name || category + " Resort"}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                );
-            })
+            category
+                ? categories.map((category) => {
+                      const filtered = promotions.filter(
+                          (promo) => promo.category === category,
+                      );
+                      if (
+                          filtered.length === 0 &&
+                          category === Astro.props.category
+                      ) {
+                          return (
+                              <div class="text-gray-500 italic text-center p-4 col-span-3">
+                                  No {category.toLowerCase()} available at this
+                                  time
+                              </div>
+                          );
+                      }
+                      return (
+                          <div class="col-span-3">
+                              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                  {filtered.map((promo) => (
+                                      <div
+                                          class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col"
+                                          style="min-height: 500px;"
+                                      >
+                                          <div class="relative h-56 w-full">
+                                              <div class="relative h-full w-full overflow-hidden">
+                                                  {promo.imageIdCarousel.map(
+                                                      (imageId, index) => (
+                                                          <img
+                                                              src={UFSImageUrl(
+                                                                  imageId,
+                                                              )}
+                                                              alt={
+                                                                  promo.description ||
+                                                                  category
+                                                              }
+                                                              class="object-cover w-full h-full absolute transition-opacity duration-300"
+                                                              style={`opacity: ${index === 0 ? "1" : "0"}`}
+                                                              data-index={index}
+                                                          />
+                                                      ),
+                                                  )}
+                                              </div>
+                                              <button
+                                                  class="absolute left-4 top-1/2 -translate-y-1/2 bg-green-600 rounded-full p-2 cursor-pointer hover:bg-green-700 transition-colors"
+                                                  onclick={`this.closest('.relative').querySelectorAll('img').forEach((img, i) => {
+                                                      const currentIndex = parseInt(img.dataset.index);
+                                                      const newIndex = (currentIndex - 1 + ${promo.imageIdCarousel.length}) % ${promo.imageIdCarousel.length};
+                                                      img.style.opacity = newIndex === 0 ? '1' : '0';
+                                                      img.dataset.index = newIndex;
+                                                  })`}
+                                              >
+                                                  <svg
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      fill="none"
+                                                      viewBox="0 0 24 24"
+                                                      stroke-width="2"
+                                                      stroke="white"
+                                                      class="w-6 h-6"
+                                                  >
+                                                      <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          d="M15 19l-7-7 7-7"
+                                                      />
+                                                  </svg>
+                                              </button>
+                                              <button
+                                                  class="absolute right-4 top-1/2 -translate-y-1/2 bg-green-600 rounded-full p-2 cursor-pointer hover:bg-green-700 transition-colors"
+                                                  onclick={`this.closest('.relative').querySelectorAll('img').forEach((img, i) => {
+                                                      const currentIndex = parseInt(img.dataset.index);
+                                                      const newIndex = (currentIndex + 1) % ${promo.imageIdCarousel.length};
+                                                      img.style.opacity = newIndex === 0 ? '1' : '0';
+                                                      img.dataset.index = newIndex;
+                                                  })`}
+                                              >
+                                                  <svg
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      fill="none"
+                                                      viewBox="0 0 24 24"
+                                                      stroke-width="2"
+                                                      stroke="white"
+                                                      class="w-6 h-6"
+                                                  >
+                                                      <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          d="M9 5l7 7-7 7"
+                                                      />
+                                                  </svg>
+                                              </button>
+                                          </div>
+                                          <div class=" flex-1 flex flex-col justify-between">
+                                              <a
+                                                  href={`https://maps.google.com/?q=${promo.coordinates}`}
+                                                  target="_blank"
+                                                  class="flex items-center mb-2 p-6"
+                                              >
+                                                  <svg
+                                                      class="w-7 h-7 text-green-600 mr-2"
+                                                      fill="none"
+                                                      stroke="currentColor"
+                                                      stroke-width="2"
+                                                      viewBox="0 0 24 24"
+                                                  >
+                                                      <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
+                                                      />
+                                                      <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                                      />
+                                                  </svg>
+                                                  <span class="text-lg">
+                                                      {promo.address}
+                                                  </span>
+                                              </a>
+                                              <div class="flex items-center mb-4 p-6">
+                                                  <svg
+                                                      class="w-7 h-7 text-green-600 mr-2"
+                                                      fill="none"
+                                                      stroke="currentColor"
+                                                      stroke-width="2"
+                                                      viewBox="0 0 24 24"
+                                                  >
+                                                      <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+                                                      />
+                                                  </svg>
+                                                  <span class="text-lg">
+                                                      {promo.description}
+                                                  </span>
+                                              </div>
+                                              <div class="bg-green-600 text-white text-2xl font-bold text-center py-3 rounded-b-lg mt-auto">
+                                                  {promo.name ||
+                                                      category + " Resort"}
+                                              </div>
+                                          </div>
+                                      </div>
+                                  ))}
+                              </div>
+                          </div>
+                      );
+                  })
+                : categories.map((category) => {
+                      const filtered = promotions.filter(
+                          (promo) => promo.category === category,
+                      );
+                      if (filtered.length === 0) {
+                          return (
+                              <div class="text-gray-500 italic text-center p-4 col-span-3">
+                                  No {category.toLowerCase()} available at this
+                                  time
+                              </div>
+                          );
+                      }
+                      return (
+                          <div class="col-span-3">
+                              <h2 class="text-2xl font-bold mb-4 text-center">
+                                  {category}
+                              </h2>
+                              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                  {filtered.map((promo) => (
+                                      <div
+                                          class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col"
+                                          style="min-height: 500px;"
+                                      >
+                                          <div class="relative h-56 w-full">
+                                              <div class="relative h-full w-full overflow-hidden">
+                                                  {promo.imageIdCarousel.map(
+                                                      (imageId, index) => (
+                                                          <img
+                                                              src={UFSImageUrl(
+                                                                  imageId,
+                                                              )}
+                                                              alt={
+                                                                  promo.description ||
+                                                                  category
+                                                              }
+                                                              class="object-cover w-full h-full absolute transition-opacity duration-300"
+                                                              style={`opacity: ${index === 0 ? "1" : "0"}`}
+                                                              data-index={index}
+                                                          />
+                                                      ),
+                                                  )}
+                                              </div>
+                                              <button
+                                                  class="absolute left-4 top-1/2 -translate-y-1/2 bg-green-600 rounded-full p-2 cursor-pointer hover:bg-green-700 transition-colors"
+                                                  onclick={`this.closest('.relative').querySelectorAll('img').forEach((img, i) => {
+                                                      const currentIndex = parseInt(img.dataset.index);
+                                                      const newIndex = (currentIndex - 1 + ${promo.imageIdCarousel.length}) % ${promo.imageIdCarousel.length};
+                                                      img.style.opacity = newIndex === 0 ? '1' : '0';
+                                                      img.dataset.index = newIndex;
+                                                  })`}
+                                              >
+                                                  <svg
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      fill="none"
+                                                      viewBox="0 0 24 24"
+                                                      stroke-width="2"
+                                                      stroke="white"
+                                                      class="w-6 h-6"
+                                                  >
+                                                      <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          d="M15 19l-7-7 7-7"
+                                                      />
+                                                  </svg>
+                                              </button>
+                                              <button
+                                                  class="absolute right-4 top-1/2 -translate-y-1/2 bg-green-600 rounded-full p-2 cursor-pointer hover:bg-green-700 transition-colors"
+                                                  onclick={`this.closest('.relative').querySelectorAll('img').forEach((img, i) => {
+                                                      const currentIndex = parseInt(img.dataset.index);
+                                                      const newIndex = (currentIndex + 1) % ${promo.imageIdCarousel.length};
+                                                      img.style.opacity = newIndex === 0 ? '1' : '0';
+                                                      img.dataset.index = newIndex;
+                                                  })`}
+                                              >
+                                                  <svg
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      fill="none"
+                                                      viewBox="0 0 24 24"
+                                                      stroke-width="2"
+                                                      stroke="white"
+                                                      class="w-6 h-6"
+                                                  >
+                                                      <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          d="M9 5l7 7-7 7"
+                                                      />
+                                                  </svg>
+                                              </button>
+                                          </div>
+                                          <div class=" flex-1 flex flex-col justify-between">
+                                              <a
+                                                  href={`https://maps.google.com/?q=${promo.coordinates}`}
+                                                  target="_blank"
+                                                  class="flex items-center mb-2 p-6"
+                                              >
+                                                  <svg
+                                                      class="w-7 h-7 text-green-600 mr-2"
+                                                      fill="none"
+                                                      stroke="currentColor"
+                                                      stroke-width="2"
+                                                      viewBox="0 0 24 24"
+                                                  >
+                                                      <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
+                                                      />
+                                                      <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                                      />
+                                                  </svg>
+                                                  <span class="text-lg">
+                                                      {promo.address}
+                                                  </span>
+                                              </a>
+                                              <div class="flex items-center mb-4 p-6">
+                                                  <svg
+                                                      class="w-7 h-7 text-green-600 mr-2"
+                                                      fill="none"
+                                                      stroke="currentColor"
+                                                      stroke-width="2"
+                                                      viewBox="0 0 24 24"
+                                                  >
+                                                      <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+                                                      />
+                                                  </svg>
+                                                  <span class="text-lg">
+                                                      {promo.description}
+                                                  </span>
+                                              </div>
+                                              <div class="bg-green-600 text-white text-2xl font-bold text-center py-3 rounded-b-lg mt-auto">
+                                                  {promo.name ||
+                                                      category + " Resort"}
+                                              </div>
+                                          </div>
+                                      </div>
+                                  ))}
+                              </div>
+                          </div>
+                      );
+                  })
         }
     </div>
 </div>

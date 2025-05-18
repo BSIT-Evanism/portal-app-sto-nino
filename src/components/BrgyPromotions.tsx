@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { UFSImageUrl } from "@/lib/utils";
 import { Select, SelectItem, SelectContent, SelectValue, SelectTrigger } from "./ui/select";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { X } from "lucide-react";
 
 export default function BrgyPromotions() {
     const [open, setOpen] = useState(false);
@@ -51,7 +52,13 @@ export default function BrgyPromotions() {
                     ) : promotions.length > 0 ? (
                         promotions.map((promo) => (
                             <TableRow key={promo.id}>
-                                <TableCell>{promo.imageId ? <img src={UFSImageUrl(promo.imageId)} alt="Promotion" className="w-16 h-16 object-cover" /> : 'No image'}</TableCell>
+                                <TableCell>{promo.imageIdCarousel && promo.imageIdCarousel.length > 0 ?
+                                    <div className="flex gap-2">
+                                        {promo.imageIdCarousel.map((image) => (
+                                            <img src={UFSImageUrl(image)} alt="Promotion" className="w-16 h-16 object-cover" />
+                                        ))}
+                                    </div>
+                                    : 'No image'}</TableCell>
                                 <TableCell>{promo.address}</TableCell>
                                 <TableCell>{promo.description}</TableCell>
                                 <TableCell>{promo.category}</TableCell>
@@ -76,25 +83,45 @@ function AddPromotionButton({ onAdded }: { onAdded: () => void }) {
     const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [coordinates, setCoordinates] = useState<[number, number]>([0, 0]);
+    const [selectedImages, setSelectedImages] = useState<File[]>([]);
+
+    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const newImages = Array.from(e.target.files);
+            setSelectedImages(prev => [...prev, ...newImages]);
+            // Reset the input value to allow selecting the same file again
+            e.target.value = '';
+        }
+    };
+
+    const removeImage = (index: number) => {
+        setSelectedImages(prev => prev.filter((_, i) => i !== index));
+    };
+
     async function addPromotion(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setIsLoading(true);
         const formData = new FormData(e.target as HTMLFormElement);
-        const imageId = formData.get("imageId") as string;
-        const category = formData.get("category") as string;
-        const address = formData.get("address") as string;
-        const description = formData.get("description") as string;
+
+        // Remove the existing imageId from formData
+        formData.delete('imageId');
+
+        // Append each selected image
+        selectedImages.forEach(image => {
+            formData.append('imageId', image);
+        });
+
         const { data, error } = await actions.admin.addPromotion(formData);
         if (data) {
             toast.success("Promotion added successfully");
             onAdded();
             setOpen(false);
+            setSelectedImages([]); // Clear selected images
         } else {
             toast.error("Failed to add promotion");
         }
         setIsLoading(false);
     }
-
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -107,8 +134,74 @@ function AddPromotionButton({ onAdded }: { onAdded: () => void }) {
                     <DialogDescription>Fill in the details to add a new promotion.</DialogDescription>
                 </DialogHeader>
                 <form className="flex flex-col gap-4" onSubmit={addPromotion}>
-                    <Label htmlFor="imageId">Image</Label>
-                    <Input id="imageId" name="imageId" type="file" required />
+                    <div className="space-y-2">
+                        <Label htmlFor="imageId">Images</Label>
+                        <div
+                            className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors"
+                            onClick={() => document.getElementById('imageId')?.click()}
+                        >
+                            <div className="flex flex-col items-center gap-2">
+                                <svg
+                                    className="w-8 h-8 text-gray-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                    />
+                                </svg>
+                                <span className="text-sm text-gray-600">
+                                    Click to upload images or drag and drop
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                    PNG, JPG, GIF up to 10MB
+                                </span>
+                            </div>
+                        </div>
+                        <Input
+                            id="imageId"
+                            name="imageId"
+                            type="file"
+                            multiple
+                            required={selectedImages.length === 0}
+                            accept="image/*"
+                            onChange={handleImageSelect}
+                            className="hidden"
+                        />
+                        {selectedImages.length === 0 && (
+                            <p className="text-sm text-red-500">Please select at least one image</p>
+                        )}
+                    </div>
+
+                    {/* Image Preview Section */}
+                    {selectedImages.length > 0 && (
+                        <div className="space-y-2">
+                            <Label>Selected Images</Label>
+                            <div className="grid grid-cols-3 gap-2">
+                                {selectedImages.map((image, index) => (
+                                    <div key={index} className="relative group">
+                                        <img
+                                            src={URL.createObjectURL(image)}
+                                            alt={`Preview ${index + 1}`}
+                                            className="w-full h-24 object-cover rounded-md"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => removeImage(index)}
+                                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     <Label htmlFor="name">Name</Label>
                     <Input id="name" name="name" placeholder="Name" />
                     <Label htmlFor="category">Category</Label>
