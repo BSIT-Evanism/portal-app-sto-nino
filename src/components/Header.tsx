@@ -6,13 +6,14 @@ import React, { useState } from "react"
 import useSWR from "swr"
 import { Menu } from "lucide-react"
 import { Drawer, DrawerTrigger, DrawerContent } from "./ui/drawer"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion"
 
 
 
 
 export const MainHeader = ({ role, pathname, approved, hasSession }: { role: string | null, pathname: string, approved: boolean, hasSession: boolean }) => {
     return (
-        <section className="w-full px-8 text-white bg-bg">
+        <section className="w-full px-8 text-white  bg-gradient-to-t from-green-500 to-black/90">
             <div className="container flex flex-row items-center justify-between text-center py-5 mx-auto max-w-7xl">
                 {/* Logo */}
                 <a href="/" className="flex items-center font-medium text-gray-900 ">
@@ -28,34 +29,61 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                             </button>
                         </DrawerTrigger>
                         <DrawerContent>
-                            <nav className="flex flex-col gap-2 p-6 text-black">
+                            <nav className="flex flex-col gap-2 p-6 text-black max-h-[80vh] overflow-y-auto">
                                 <a className="hover:underline px-4 py-2 text-center" href="/">Home</a>
-                                <Dropdown label="About">
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/mission-vision">Mission and Vision</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/history">History</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/officials">Officials</a>
-                                </Dropdown>
-                                {approved && (
-                                    <Dropdown label="Services">
-                                        <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Tickets</a>
-                                        <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Concern Board</a>
-                                    </Dropdown>
-                                )}
-                                <Dropdown label="Feed">
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/news">News</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/announcements">Announcements</a>
-                                </Dropdown>
-                                <Dropdown label="Promotions">
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions`}>All</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Properties`}>Properties</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Resorts`}>Resorts</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Churches`}>Churches</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Farms`}>Farms</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Nature`}>Nature</a>
-                                </Dropdown>
-                                <Dropdown label="Contact Us">
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/contact-us">Contact Us</a>
-                                </Dropdown>
+                                <Accordion type="single" collapsible className="w-full">
+                                    <AccordionItem value="about">
+                                        <AccordionTrigger className="text-lg font-bold">About</AccordionTrigger>
+                                        <AccordionContent>
+                                            <div className="flex flex-col">
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/mission-vision">Mission and Vision</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/history">History</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/officials">Officials</a>
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                    {approved && (
+                                        <AccordionItem value="services">
+                                            <AccordionTrigger className="text-lg font-bold">Services</AccordionTrigger>
+                                            <AccordionContent>
+                                                <div className="flex flex-col">
+                                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Tickets</a>
+                                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Concern Board</a>
+                                                </div>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    )}
+                                    <AccordionItem value="feed">
+                                        <AccordionTrigger className="text-lg font-bold">Feed</AccordionTrigger>
+                                        <AccordionContent>
+                                            <div className="flex flex-col">
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/news">News</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/announcements">Announcements</a>
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                    <AccordionItem value="promotions">
+                                        <AccordionTrigger className="text-lg font-bold">Promotions</AccordionTrigger>
+                                        <AccordionContent>
+                                            <div className="flex flex-col">
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions`}>All</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Properties`}>Properties</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Resorts`}>Resorts</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Churches`}>Churches</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Farms`}>Farms</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Nature`}>Nature</a>
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                    <AccordionItem value="contact">
+                                        <AccordionTrigger className="text-lg font-bold">Contact Us</AccordionTrigger>
+                                        <AccordionContent>
+                                            <div className="flex flex-col">
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/contact-us">Contact Us</a>
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
                                 {role === 'admin' && (
                                     <a className="hover:underline px-4 py-2" href="/admin">Admin</a>
                                 )}

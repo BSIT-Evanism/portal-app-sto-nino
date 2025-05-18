@@ -8,7 +8,7 @@ export default function BrgyProgramsDisplay() {
     const { data: programs, isLoading } = useSWR<BrgyProgramType[]>('/api/brgy-programs', fetcher);
 
     return (
-        <section className="bg-gradient-to-b from-gray-100 to-gray-700 py-12 min-h-screen">
+        <section className="bg-gradient-to-b from-gray-100 to-gray-700 py-12 min-h-screen px-4 md:px-0">
             <h2 className="text-3xl font-bold text-center mb-10">Community Programs</h2>
             <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                 {isLoading && <div className="col-span-3 text-center">Loading...</div>}

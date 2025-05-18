@@ -32,7 +32,12 @@ if (!category) {
                 const filtered = promotions.filter(
                     (promo) => promo.category === category,
                 );
-                if (filtered.length === 0) return null;
+                if (filtered.length === 0 && Astro.props.category === category)
+                    return (
+                        <div class="text-gray-500 italic text-center p-4">
+                            No {category.toLowerCase()} available at this time
+                        </div>
+                    );
                 return (
                     <div>
                         <h2 class="text-2xl font-bold mb-4 text-center">

@@ -15,7 +15,7 @@ export default function BrgyEventsDisplay() {
     const { data: events, isLoading } = useSWR('/api/brgy-events', fetcher);
 
     return (
-        <section className="min-h-screen w-full bg-gradient-to-b from-gray-100 to-gray-700 py-12">
+        <section className="min-h-screen w-full bg-gradient-to-b from-gray-100 to-gray-700 py-12 px-4 md:px-0">
             <h2 className="text-3xl font-bold text-center mb-10">Barangay Events</h2>
             <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                 {isLoading && <div className="col-span-3 text-center">Loading...</div>}
