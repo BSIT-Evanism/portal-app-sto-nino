@@ -24,9 +24,9 @@ import MapSection from "../MapSection.astro";
       loop
       class="w-full h-full object-cover aspect-video"></video>
   </section>
-
+  <Carousel server:defer />
   <!-- Quick Stats Section -->
-  <section class="py-12 bg-gray-50">
+  <!-- <section class="py-12 bg-gray-50">
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         <div class="text-center p-6 bg-white rounded-lg shadow-sm">
@@ -47,13 +47,12 @@ import MapSection from "../MapSection.astro";
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- Emergency Services Section -->
 
   <MissionVisionComp />
   <HistoryComp />
-  <!-- <Carousel server:defer /> -->
 
   <!-- Featured Services -->
   <!-- <section class="py-12 bg-gray-50">

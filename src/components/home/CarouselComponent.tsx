@@ -62,12 +62,12 @@ export default function CarouselComponent() {
     return (
         <div className="relative overflow-hidden shadow-sm">
             <div className='absolute z-10 top-5 left-5 bg-white text-black p-2 rounded-lg'>
-                Highlights {highlights?.length ? `(${highlights.length})` : ''}
+                Announcements {highlights?.length ? `(${highlights.length})` : ''}
             </div>
 
             {isLoading ? (
                 <div className="w-full h-[40vh] bg-gray-200 animate-pulse flex items-center justify-center">
-                    <div className="text-gray-400">Loading highlights...</div>
+                    <div className="text-gray-400">Loading Announcements...</div>
                 </div>
             ) : (
                 <>

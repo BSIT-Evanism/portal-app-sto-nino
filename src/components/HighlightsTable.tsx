@@ -18,7 +18,7 @@ export const HighlightsTable = () => {
 
     if (isLoading) return <div>Loading...</div>
 
-    if (!highlights) return <div>No highlights found</div>
+    if (!highlights) return <div>No announcements found</div>
 
     function deleteHighlight(id: number) {
         startTransition(async () => {
@@ -28,9 +28,9 @@ export const HighlightsTable = () => {
                 })
 
                 if (response.data) {
-                    toast.success("Highlight deleted successfully")
+                    toast.success("Announcement deleted successfully")
                 } else {
-                    toast.error("Failed to delete highlight")
+                    toast.error("Failed to delete announcement")
                 }
 
             } catch (error) {
@@ -88,9 +88,9 @@ const AddHighlightButton = () => {
         })
 
         if (response.data) {
-            toast.success("Highlight added successfully")
+            toast.success("Announcement added successfully")
         } else {
-            toast.error("Failed to add highlight")
+            toast.error("Failed to add announcement")
         }
 
         mutate("/api/highlights")
@@ -101,12 +101,12 @@ const AddHighlightButton = () => {
     return (
         <Dialog>
             <DialogTrigger asChild className="w-full">
-                <Button>Add Highlight</Button>
+                <Button>Add Announcement</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Add Highlight</DialogTitle>
-                    <DialogDescription>Add a highlight to the table such as a picture with a short caption</DialogDescription>
+                    <DialogTitle>Add Announcement</DialogTitle>
+                    <DialogDescription>Add an announcement to the table such as a picture with a short caption</DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-col gap-4">
                     <Label htmlFor="image">Image URL</Label>
@@ -142,7 +142,7 @@ const AddHighlightButton = () => {
                     <p className="text-sm text-gray-500">Please provide a link that will redirect the user to main content</p>
                 </div>
                 <DialogFooter>
-                    <Button onClick={addHighlight} disabled={isLoading}>{isLoading ? "Adding..." : "Add Highlight"}</Button>
+                    <Button onClick={addHighlight} disabled={isLoading}>{isLoading ? "Adding..." : "Add Announcement"}</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
