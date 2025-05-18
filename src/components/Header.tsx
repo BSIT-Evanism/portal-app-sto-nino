@@ -63,7 +63,7 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                                         </AccordionContent>
                                     </AccordionItem>
                                     <AccordionItem value="promotions">
-                                        <AccordionTrigger className="text-lg font-bold">Promotions</AccordionTrigger>
+                                        <AccordionTrigger className="text-lg font-bold">Explore</AccordionTrigger>
                                         <AccordionContent>
                                             <div className="flex flex-col">
                                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions`}>All</a>
