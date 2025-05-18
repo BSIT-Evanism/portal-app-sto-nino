@@ -23,7 +23,7 @@ export const ModalAuth = () => {
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <div className="flex items-center space-x-6">
+            <div className="items-center space-x-6 hidden">
                 <div className="flex-1" />
                 <DialogTrigger asChild>
                     <button

@@ -96,7 +96,7 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                             </Dropdown>
                         </li>
                         <li>
-                            <Dropdown label="Promotions">
+                            <Dropdown label="Explore">
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions`}>All</a>
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Properties`}>Properties</a>
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href={`/promotions/Resorts`}>Resorts</a>
