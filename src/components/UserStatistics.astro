@@ -9,11 +9,11 @@ import { sql } from "drizzle-orm";
 const allRequests = await db.$count(requests);
 const pendingRequests = await db.$count(
   requests,
-  and(ne(requests.status, "rejected"), ne(requests.status, "approved")),
+  and(ne(requests.status, "rejected"), ne(requests.status, "approved"))
 );
 const doneRequests = await db.$count(
   requests,
-  or(eq(requests.status, "approved"), eq(requests.status, "rejected")),
+  or(eq(requests.status, "approved"), eq(requests.status, "rejected"))
 );
 const usersCount = await db.$count(user);
 const approvedUsersCount = await db.$count(user, eq(user.approved, true));
@@ -24,7 +24,7 @@ const totalUserWithFamily = await db.query.user.findMany({
   },
 });
 const usersWIthFamilyRegistered = totalUserWithFamily.filter(
-  (fam) => fam.family !== null || fam.details !== null,
+  (fam) => fam.family !== null || fam.details !== null
 );
 
 const monthlyRequests = await db.execute(sql`
@@ -49,7 +49,7 @@ console.log("Monthly Requests:", monthlyRequests.rows);
 const allFamilyData = await db.query.familyData.findMany();
 const totalFamilyMembers = allFamilyData.reduce(
   (acc, fam) => acc + (fam.data?.length || 0),
-  0,
+  0
 );
 const totalResidents = usersCount + totalFamilyMembers;
 
@@ -75,7 +75,7 @@ function getServiceHours(request: any) {
 }
 const totalServiceHours = allRequestsWithUpdates.reduce(
   (acc, req) => acc + getServiceHours(req),
-  0,
+  0
 );
 ---
 
@@ -83,18 +83,18 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
   class="col-span-2 p-6 bg-white rounded-xl shadow-sm border border-slate-200 transition-all duration-200 hover:shadow-md space-y-6"
 >
   <h2 class="text-xl font-semibold text-slate-800 mb-6">System Statistics</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     <!-- Total Requests Card -->
     <div
-      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+      class="bg-white rounded-lg shadow flex items-center p-3 border-l-8 border-green-700 min-h-[100px]"
     >
       <div class="flex-1">
         <div class="text-lg font-medium text-black mb-2">Total Request</div>
-        <div class="text-6xl font-bold text-green-700">{allRequests}</div>
+        <div class="text-4xl font-bold text-green-700">{allRequests}</div>
       </div>
       <div>
         <svg
-          class="w-16 h-16 text-green-700"
+          class="w-10 h-10 text-green-700"
           fill="currentColor"
           viewBox="0 0 24 24"
           stroke="none"
@@ -107,13 +107,13 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
     </div>
     <!-- Monthly Requests Card -->
     <div
-      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+      class="bg-white rounded-lg shadow flex items-center p-3 border-l-8 border-green-700 min-h-[100px]"
     >
       <div class="flex-1">
         <div class="text-lg font-medium text-black mb-2">
           Requests This Month
         </div>
-        <div class="text-6xl font-bold text-green-700">
+        <div class="text-4xl font-bold text-green-700">
           {latestMonth ? latestMonth.count : 0}
         </div>
         <div class="text-sm text-slate-500 mt-2">
@@ -126,7 +126,7 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
       </div>
       <div>
         <svg
-          class="w-16 h-16 text-green-700"
+          class="w-10 h-10 text-green-700"
           fill="currentColor"
           viewBox="0 0 24 24"
           stroke="none"
@@ -137,15 +137,15 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
     </div>
     <!-- Pending Requests Card -->
     <div
-      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+      class="bg-white rounded-lg shadow flex items-center p-3 border-l-8 border-green-700 min-h-[100px]"
     >
       <div class="flex-1">
         <div class="text-lg font-medium text-black mb-2">Pending Request</div>
-        <div class="text-6xl font-bold text-green-700">{pendingRequests}</div>
+        <div class="text-4xl font-bold text-green-700">{pendingRequests}</div>
       </div>
       <div>
         <svg
-          class="w-16 h-16 text-green-700"
+          class="w-10 h-10 text-green-700"
           fill="currentColor"
           viewBox="0 0 24 24"
           stroke="none"
@@ -156,15 +156,15 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
     </div>
     <!-- Completed Requests Card -->
     <div
-      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+      class="bg-white rounded-lg shadow flex items-center p-3 border-l-8 border-green-700 min-h-[100px]"
     >
       <div class="flex-1">
         <div class="text-lg font-medium text-black mb-2">Completed Request</div>
-        <div class="text-6xl font-bold text-green-700">{doneRequests}</div>
+        <div class="text-4xl font-bold text-green-700">{doneRequests}</div>
       </div>
       <div>
         <svg
-          class="w-16 h-16 text-green-700"
+          class="w-10 h-10 text-green-700"
           fill="currentColor"
           viewBox="0 0 24 24"
           stroke="none"
@@ -175,15 +175,15 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
     </div>
     <!-- Total Users Card -->
     <div
-      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+      class="bg-white rounded-lg shadow flex items-center p-3 border-l-8 border-green-700 min-h-[100px]"
     >
       <div class="flex-1">
         <div class="text-lg font-medium text-black mb-2">Total Users</div>
-        <div class="text-6xl font-bold text-green-700">{usersCount}</div>
+        <div class="text-4xl font-bold text-green-700">{usersCount}</div>
       </div>
       <div>
         <svg
-          class="w-16 h-16 text-green-700"
+          class="w-10 h-10 text-green-700"
           fill="currentColor"
           viewBox="0 0 24 24"
           stroke="none"
@@ -196,17 +196,17 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
     </div>
     <!-- Approved Users Card -->
     <div
-      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+      class="bg-white rounded-lg shadow flex items-center p-3 border-l-8 border-green-700 min-h-[100px]"
     >
       <div class="flex-1">
         <div class="text-lg font-medium text-black mb-2">Approved User</div>
-        <div class="text-6xl font-bold text-green-700">
+        <div class="text-4xl font-bold text-green-700">
           {approvedUsersCount}
         </div>
       </div>
       <div>
         <svg
-          class="w-16 h-16 text-green-700"
+          class="w-10 h-10 text-green-700"
           fill="currentColor"
           viewBox="0 0 24 24"
           stroke="none"
@@ -219,19 +219,19 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
     </div>
     <!-- Total Users With Family Registered Card -->
     <div
-      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+      class="bg-white rounded-lg shadow flex items-center p-3 border-l-8 border-green-700 min-h-[100px]"
     >
       <div class="flex-1">
         <div class="text-lg font-medium text-black mb-2">
           Total Users With Family Registered
         </div>
-        <div class="text-6xl font-bold text-green-700">
+        <div class="text-4xl font-bold text-green-700">
           {usersWIthFamilyRegistered.length}
         </div>
       </div>
       <div>
         <svg
-          class="w-16 h-16 text-green-700"
+          class="w-10 h-10 text-green-700"
           fill="currentColor"
           viewBox="0 0 24 24"
           stroke="none"
@@ -244,15 +244,15 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
     </div>
     <!-- Total Residents Card -->
     <div
-      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-teal-700 min-h-[170px]"
+      class="bg-white rounded-lg shadow flex items-center p-3 border-l-8 border-teal-700 min-h-[100px]"
     >
       <div class="flex-1">
         <div class="text-lg font-medium text-black mb-2">Total Residents</div>
-        <div class="text-6xl font-bold text-teal-700">{totalResidents}</div>
+        <div class="text-4xl font-bold text-teal-700">{totalResidents}</div>
       </div>
       <div>
         <svg
-          class="w-16 h-16 text-teal-700"
+          class="w-10 h-10 text-teal-700"
           fill="currentColor"
           viewBox="0 0 24 24"
           stroke="none"
@@ -265,13 +265,13 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
     </div>
     <!-- Total Service Hours Card -->
     <div
-      class="bg-white rounded-lg shadow flex items-center p-6 border-l-8 border-green-700 min-h-[170px]"
+      class="bg-white rounded-lg shadow flex items-center p-3 border-l-8 border-green-700 min-h-[100px]"
     >
       <div class="flex-1">
         <div class="text-lg font-medium text-black mb-2">
           Total Service Hours
         </div>
-        <div class="text-6xl font-bold text-green-700">
+        <div class="text-4xl font-bold text-green-700">
           {
             totalServiceHours.toLocaleString(undefined, {
               maximumFractionDigits: 2,
@@ -281,7 +281,7 @@ const totalServiceHours = allRequestsWithUpdates.reduce(
       </div>
       <div>
         <svg
-          class="w-16 h-16 text-green-700"
+          class="w-10 h-10 text-green-700"
           fill="currentColor"
           viewBox="0 0 24 24"
           stroke="none"

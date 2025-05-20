@@ -128,7 +128,7 @@ function AddPromotionButton({ onAdded }: { onAdded: () => void }) {
             <DialogTrigger asChild>
                 <Button className="mb-4">Add Promotion</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="sm:max-w-xl max-w-full w-full p-2 sm:p-6 max-sm:scale-[0.92] max-sm:!max-w-[98vw] max-sm:!w-[98vw] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Add Promotion</DialogTitle>
                     <DialogDescription>Fill in the details to add a new promotion.</DialogDescription>
