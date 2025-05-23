@@ -11,6 +11,7 @@ import ExploreComp from "../ExploreComp.astro";
 import MissionVisionComp from "../MissionVisionComp.astro";
 import HistoryComp from "../HistoryComp.astro";
 import MapSection from "../MapSection.astro";
+import Marquee from "./Marquee.astro";
 ---
 
 <div class="w-full h-fit sequence-comp">
@@ -24,6 +25,7 @@ import MapSection from "../MapSection.astro";
       loop
       class="w-full h-full object-cover aspect-video"></video>
   </section>
+  <Marquee />
   <Carousel server:defer />
   <!-- Quick Stats Section -->
   <!-- <section class="py-12 bg-gray-50">
@@ -82,35 +84,6 @@ import MapSection from "../MapSection.astro";
     </div>
   </section> -->
 
-  <RecentPosts server:defer>
-    <div slot="fallback">
-      <section class="py-12 px-4">
-        <div class="container mx-auto">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {
-              [1, 2, 3].map(() => (
-                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
-                  <div class="p-6">
-                    <div class="h-6 bg-gray-200 rounded w-3/4 mb-4" />
-                    <div class="space-y-3">
-                      <div class="h-4 bg-gray-200 rounded w-full" />
-                      <div class="h-4 bg-gray-200 rounded w-full" />
-                      <div class="h-4 bg-gray-200 rounded w-2/3" />
-                    </div>
-                    <div class="flex items-center justify-between mt-6">
-                      <div class="h-4 bg-gray-200 rounded w-1/4" />
-                      <div class="h-4 bg-gray-200 rounded w-1/4" />
-                    </div>
-                  </div>
-                </div>
-              ))
-            }
-          </div>
-        </div>
-      </section>
-    </div>
-  </RecentPosts>
-
   <!-- Announcements Section -->
   <!-- <section class="py-12 bg-white">
     <div class="container mx-auto px-4">
@@ -130,11 +103,11 @@ import MapSection from "../MapSection.astro";
     </div>
   </section> -->
 
-  <OfficersDisplay client:only="react" />
+  <!-- <OfficersDisplay client:only="react" /> -->
 
-  <List />
+  <!-- <List /> -->
   <BrgyEventsDisplay client:only="react" />
-  <BrgyProgramsDisplay client:only="react" />
+  <!-- <BrgyProgramsDisplay client:only="react" /> -->
   <ExploreComp />
 
   <!-- Quick Links Footer -->
@@ -207,6 +180,34 @@ import MapSection from "../MapSection.astro";
     </div>
   </section> -->
   <!-- Location and Contact Section -->
+  <RecentPosts server:defer>
+    <div slot="fallback">
+      <section class="py-12 px-4">
+        <div class="container mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {
+              [1, 2, 3].map(() => (
+                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+                  <div class="p-6">
+                    <div class="h-6 bg-gray-200 rounded w-3/4 mb-4" />
+                    <div class="space-y-3">
+                      <div class="h-4 bg-gray-200 rounded w-full" />
+                      <div class="h-4 bg-gray-200 rounded w-full" />
+                      <div class="h-4 bg-gray-200 rounded w-2/3" />
+                    </div>
+                    <div class="flex items-center justify-between mt-6">
+                      <div class="h-4 bg-gray-200 rounded w-1/4" />
+                      <div class="h-4 bg-gray-200 rounded w-1/4" />
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+    </div>
+  </RecentPosts>
   <MapSection />
 </div>
 

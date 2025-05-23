@@ -60,66 +60,90 @@ export default function CarouselComponent() {
     }, []);
 
     return (
-        <div className="relative overflow-hidden shadow-sm">
-            <div className='absolute z-10 top-5 left-5 bg-white text-black p-2 rounded-lg'>
-                Announcements {highlights?.length ? `(${highlights.length})` : ''}
-            </div>
+        <div className="min-h-fit w-full flex items-center justify-center bg-bg p-4">
+            <div className="relative w-full max-w-[95vw] h-[40vh] flex items-center justify-center bg-[#0b790b] rounded-none overflow-hidden" style={{ boxShadow: 'none' }}>
+                {/* Announcements label (optional, can be removed if not needed) */}
+                {/* <div className='absolute z-10 top-5 left-5 bg-white text-black p-2 rounded-lg'>
+                    Announcements {highlights?.length ? `(${highlights.length})` : ''}
+                </div> */}
 
-            {isLoading ? (
-                <div className="w-full h-[40vh] bg-gray-200 animate-pulse flex items-center justify-center">
-                    <div className="text-gray-400">Loading Announcements...</div>
-                </div>
-            ) : (
-                <>
-                    <div
-                        ref={containerRef}
-                        className="flex transition-transform duration-300 w-full"
-                    >
-                        {highlights?.length ?? 0 > 0 ? highlights?.map((item, index) => (
-                            <div key={index} className="w-full flex-shrink-0 min-w-full">
-                                <a href={item.link || ""} target="_blank" rel="noopener noreferrer">
-                                    <img
-                                        src={item.image}
-                                        alt={item.caption || ""}
-                                        loading="eager"
-                                        className="w-full h-[40vh] object-cover"
+                {isLoading ? (
+                    <div className="w-full h-full bg-gray-200 animate-pulse flex items-center justify-center">
+                        <div className="text-gray-400">Loading Announcements...</div>
+                    </div>
+                ) : (
+                    <>
+                        <div
+                            ref={containerRef}
+                            className="flex transition-transform duration-300 w-full h-full"
+                            style={{ willChange: 'transform' }}
+                        >
+                            {highlights?.length ?? 0 > 0 ? highlights?.map((item, index) => (
+                                <div key={index} className="w-full flex-shrink-0 min-w-full h-full flex items-center justify-center overflow-hidden">
+                                    {item.image ? (
+                                        <a href={item.link || ""} target="_blank" rel="noopener noreferrer" className="w-full h-full block">
+                                            <img
+                                                src={item.image}
+                                                alt={item.caption || ""}
+                                                loading="eager"
+                                                className="w-full h-full object-cover"
+                                                style={{ display: 'block' }}
+                                            />
+                                        </a>
+                                    ) : (
+                                        <div className="w-full h-full bg-[#0b790b] flex items-center justify-center"></div>
+                                    )}
+                                </div>
+                            )) : (
+                                <div className="w-full h-full bg-[#0b790b] flex items-center justify-center">
+                                    <div className="text-white">No highlights available</div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Navigation Arrows */}
+                        {highlights && highlights.length > 1 && (
+                            <>
+                                <button
+                                    className="absolute left-8 top-1/2 -translate-y-1/2 text-white text-[3rem] font-bold bg-transparent border-none outline-none cursor-pointer z-20 select-none"
+                                    onClick={() => {
+                                        goToPrev();
+                                        stopAutoRotate();
+                                    }}
+                                    aria-label="Previous slide"
+                                    style={{ background: 'none', boxShadow: 'none' }}
+                                >
+                                    &#8592;
+                                </button>
+                                <button
+                                    className="absolute right-8 top-1/2 -translate-y-1/2 text-white text-[3rem] font-bold bg-transparent border-none outline-none cursor-pointer z-20 select-none"
+                                    onClick={() => {
+                                        goToNext();
+                                        stopAutoRotate();
+                                    }}
+                                    aria-label="Next slide"
+                                    style={{ background: 'none', boxShadow: 'none' }}
+                                >
+                                    &#8594;
+                                </button>
+                            </>
+                        )}
+
+                        {/* Indicator Dots */}
+                        {highlights && highlights.length > 1 && (
+                            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-20">
+                                {highlights.map((_, idx) => (
+                                    <span
+                                        key={idx}
+                                        className={`w-4 h-4 rounded-full bg-white transition-all duration-300 ${currentIndex === idx ? '' : 'opacity-50'}`}
+                                        style={{ display: 'inline-block' }}
                                     />
-                                </a>
-                                <p className="text-center text-sm text-gray-500 bg-white">{item.caption}</p>
-                            </div>
-                        )) : (
-                            <div className="w-full h-[40vh] bg-gray-200 flex items-center justify-center">
-                                <div className="text-gray-400">No highlights available</div>
+                                ))}
                             </div>
                         )}
-                    </div>
-
-                    {highlights && highlights.length > 1 && (
-                        <>
-                            <button
-                                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full hover:bg-gray-50 transition-colors shadow-md text-gray-600 hover:text-gray-900"
-                                onClick={() => {
-                                    goToPrev();
-                                    stopAutoRotate();
-                                }}
-                                aria-label="Previous slide"
-                            >
-                                ←
-                            </button>
-                            <button
-                                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full hover:bg-gray-50 transition-colors shadow-md text-gray-600 hover:text-gray-900"
-                                onClick={() => {
-                                    goToNext();
-                                    stopAutoRotate();
-                                }}
-                                aria-label="Next slide"
-                            >
-                                →
-                            </button>
-                        </>
-                    )}
-                </>
-            )}
+                    </>
+                )}
+            </div>
         </div>
     );
 } 

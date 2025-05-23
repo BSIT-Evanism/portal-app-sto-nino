@@ -2,7 +2,7 @@
 
 ---
 
-<footer class="bg-bg text-white">
+<footer class="bg-gradient-to-b from-green-500 to-black text-white">
   <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 py-8">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
       <!-- Logo and Barangay Name -->
@@ -12,11 +12,11 @@
           alt="Barangay Sto. Niño Logo"
           class="w-16 h-16 mb-2 rounded-full border-2 border-white"
         />
-        <h2 class="text-lg font-bold">Barangay Sto. Niño</h2>
+        <h2 class="text-2xl font-bold">Barangay Sto. Niño</h2>
       </div>
       <!-- About Us -->
       <div class="flex flex-col items-center">
-        <h3 class="font-semibold mb-2">About Us</h3>
+        <h3 class="font-semibold mb-2 text-lg">About Us</h3>
         <p class="text-center text-sm max-w-xs">
           Barangay Sto. Niño Lipa City, Batangas: Your online resource for
           community information and services.
@@ -24,7 +24,7 @@
       </div>
       <!-- Contact Us -->
       <div class="flex flex-col items-center md:items-end">
-        <h3 class="font-semibold mb-2">Contact Us</h3>
+        <h3 class="font-semibold mb-2 text-lg">Contact Us</h3>
         <p class="text-sm text-right">
           DOST S & T Complex, Sudlon, Lahug, Cebu City, Philippines<br />
           <br />
@@ -36,12 +36,24 @@
     </div>
     <!-- Bottom Row -->
     <div
-      class="mt-8 flex flex-col md:flex-row items-center justify-between border-t border-white/20 pt-4"
+      class="mt-8 flex flex-col md:flex-row items-center justify-between border-t border-white/20 pt-4 gap-4"
     >
-      <p class="text-sm">Copyright © 2025. All rights reserved.</p>
+      <!-- Left: Terms & Condition, Privacy Policy -->
+      <div
+        class="flex gap-8 text-sm font-semibold w-full md:w-auto justify-center md:justify-start"
+      >
+        <a href="#" class="hover:underline" id="terms-link">Terms & Condition</a
+        >
+        <a href="#" class="hover:underline" id="privacy-link">Privacy Policy</a>
+      </div>
+      <!-- Center: Copyright -->
+      <p class="text-sm w-full md:w-auto text-center">
+        Copyright © 2025. All rights reserved.
+      </p>
+      <!-- Right: Auth Buttons -->
       {
         !Astro.locals.session && (
-          <div class="mt-2 md:mt-0 flex gap-2 bg-white rounded-full">
+          <div class="flex gap-2 bg-white rounded-full w-full md:w-auto justify-center md:justify-end">
             <button
               onclick="window.dispatchEvent(new CustomEvent('open-auth-modal', { detail: { mode: 'signin' } }))"
               class="bg-slate-100 text-green-700 px-4 py-1 rounded-full font-medium hover:bg-gray-100 transition"
@@ -60,3 +72,177 @@
     </div>
   </div>
 </footer>
+
+<!-- Privacy Policy Modal -->
+<div
+  id="privacy-modal"
+  class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center hidden"
+>
+  <div
+    class="flex-1 w-full flex flex-col items-center justify-center overflow-y-auto px-4 py-12"
+  >
+    <h2 class="text-3xl font-bold text-green-700 text-center mb-6">
+      Privacy Policy
+    </h2>
+    <div class="text-gray-800 space-y-4 max-w-2xl mx-auto text-center">
+      <p>
+        We value your privacy. Any personal information collected through this
+        website—such as names, contact details, or document requests—is used
+        only to provide barangay services. We do not share your data with third
+        parties, unless required by law.
+      </p>
+      <p>
+        Your information is stored securely and handled only by authorized
+        personnel. By using this site, you agree to our data handling practices
+        in line with the <a
+          href="https://www.privacy.gov.ph/data-privacy-act/"
+          target="_blank"
+          class="text-green-700 underline">Data Privacy Act of 2012</a
+        >.
+      </p>
+      <p>For concerns, please contact the Barangay Sto. Niño office.</p>
+    </div>
+  </div>
+  <button
+    id="close-privacy-modal"
+    class="fixed bottom-8 left-8 flex items-center gap-2 bg-green-700 text-white font-semibold px-6 py-2 rounded-full shadow hover:bg-green-800 transition text-lg"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      class="w-6 h-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M15.75 19.5L8.25 12l7.5-7.5"></path>
+    </svg>
+    Back
+  </button>
+</div>
+
+<!-- Terms & Condition Modal -->
+<div
+  id="terms-modal"
+  class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center hidden"
+>
+  <div
+    class="flex-1 w-full flex flex-col items-center justify-center overflow-y-auto px-4 py-12"
+  >
+    <h2 class="text-3xl font-bold text-green-700 text-center mb-6">
+      Terms and Conditions
+    </h2>
+    <div class="text-gray-800 space-y-6 max-w-3xl mx-auto text-center">
+      <p>
+        Welcome to the official website of Barangay Sto. Niño. By accessing and
+        using this website, you agree to comply with the following terms and
+        conditions:
+      </p>
+      <div class="text-left max-w-2xl mx-auto">
+        <h3 class="text-xl font-bold mb-1">Use of the Website</h3>
+        <p>
+          This website is intended to provide official information, services,
+          and updates related to Barangay Sto. Niño. Users are expected to use
+          the website responsibly and respectfully. Any misuse, including
+          attempting to access unauthorized areas or submit false information,
+          is prohibited.
+        </p>
+        <h3 class="text-xl font-bold mt-6 mb-1">Accuracy of Information</h3>
+        <p>
+          We strive to keep all content accurate and up to date. However,
+          Barangay Sto. Niño does not guarantee the completeness or accuracy of
+          all information at all times. Users are encouraged to contact the
+          barangay office directly for confirmation of any critical data or
+          requirements.
+        </p>
+        <h3 class="text-xl font-bold mt-6 mb-1">Privacy and Data Protection</h3>
+        <p>
+          Personal information submitted through the website (e.g., for document
+          requests) is collected solely for the purpose of delivering barangay
+          services. We are committed to protecting your data in accordance with
+          the Data Privacy Act of 2012. No personal data will be shared with
+          third parties without consent.
+        </p>
+      </div>
+    </div>
+  </div>
+  <button
+    id="close-terms-modal"
+    class="fixed bottom-8 left-8 flex items-center gap-2 bg-green-700 text-white font-semibold px-6 py-2 rounded-full shadow hover:bg-green-800 transition text-lg"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      class="w-6 h-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M15.75 19.5L8.25 12l7.5-7.5"></path>
+    </svg>
+    Back
+  </button>
+</div>
+
+<script>
+  const privacyLink = document.getElementById("privacy-link");
+  const privacyModal = document.getElementById("privacy-modal");
+  const closePrivacyModal = document.getElementById("close-privacy-modal");
+  const termsLink = document.getElementById("terms-link");
+  const termsModal = document.getElementById("terms-modal");
+  const closeTermsModal = document.getElementById("close-terms-modal");
+
+  privacyLink?.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (privacyModal) {
+      privacyModal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+  });
+
+  closePrivacyModal?.addEventListener("click", () => {
+    if (privacyModal) {
+      privacyModal.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+  });
+
+  if (privacyModal) {
+    privacyModal.addEventListener("click", (e) => {
+      if (e.target === privacyModal) {
+        privacyModal.classList.add("hidden");
+        document.body.style.overflow = "";
+      }
+    });
+  }
+
+  termsLink?.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (termsModal) {
+      termsModal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+  });
+
+  closeTermsModal?.addEventListener("click", () => {
+    if (termsModal) {
+      termsModal.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+  });
+
+  if (termsModal) {
+    termsModal.addEventListener("click", (e) => {
+      if (e.target === termsModal) {
+        termsModal.classList.add("hidden");
+        document.body.style.overflow = "";
+      }
+    });
+  }
+</script>

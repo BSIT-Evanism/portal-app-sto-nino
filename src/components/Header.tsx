@@ -14,10 +14,14 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./
 export const MainHeader = ({ role, pathname, approved, hasSession }: { role: string | null, pathname: string, approved: boolean, hasSession: boolean }) => {
     return (
         <section className="w-full px-8 text-white  bg-gradient-to-t from-green-500 to-black/90">
-            <div className="container flex flex-row items-center justify-between text-center py-5 mx-auto max-w-7xl">
+            <div className="container flex flex-row items-center justify-between text-center py-5 mx-auto w-full">
                 {/* Logo */}
                 <a href="/" className="flex items-center font-medium text-gray-900 ">
                     <img src="/brgy-logo.png" alt="Barangay Logo" className="h-20" />
+                    <div className="ml-4 hidden md:block">
+                        <div className="text-2xl font-extrabold text-white leading-tight">Barangay Sto. Niño</div>
+                        <div className="text-lg font-semibold text-black">Lipa City, Batangas</div>
+                    </div>
                 </a>
 
                 {/* Hamburger for mobile */}
@@ -49,6 +53,8 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                                                 <div className="flex flex-col">
                                                     <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Tickets</a>
                                                     <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Concern Board</a>
+                                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#docs">Brgy. Documents</a>
+                                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#progs">Community Programs</a>
                                                 </div>
                                             </AccordionContent>
                                         </AccordionItem>
@@ -112,8 +118,10 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                         {approved && (
                             <li>
                                 <Dropdown label="Services">
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Tickets</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Concern Board</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Request</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Feedback</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#docs">Brgy. Documents</a>
+                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#progs">Community Programs</a>
                                 </Dropdown>
                             </li>
                         )}

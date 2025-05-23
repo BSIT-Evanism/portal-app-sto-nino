@@ -1,32 +1,43 @@
-<div
-    style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(to bottom, #e0e0e0, #ffffff); padding: 0 1rem;"
->
+<div class="w-full flex justify-center items-center">
+  <div
+    class="relative w-full mx-auto bg-white rounded-md shadow-sm px-8 py-12 overflow-hidden"
+  >
+    <!-- Subtle background image -->
     <div
-        style="background: white; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-width: 800px; width: 100%; overflow: hidden; border-bottom: 8px solid #219a38;"
+      aria-hidden="true"
+      class="absolute inset-0 pointer-events-none"
+      style="
+        background-image: url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.08;
+        filter: grayscale(100%);
+        z-index: 0;
+      "
     >
-        <img
-            src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80"
-            alt="Ancient columns"
-            style="width: 100%; height: 200px; object-fit: cover; filter: grayscale(100%);"
-        />
-        <div style="padding: 2rem;">
-            <h1
-                style="font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem;"
-            >
-                History
-            </h1>
-            <p style="font-size: 1.1rem; line-height: 1.6; margin: 0;">
-                History is the study of past events, particularly those
-                concerning human societies, civilizations, and cultures. It
-                involves the exploration and interpretation of records,
-                artifacts, and narratives to understand how people lived, made
-                decisions, and influenced the world over time. Through history,
-                we gain insight into the development of societies, the causes
-                and effects of major events, and the evolution of ideas,
-                institutions, and technologies. It helps us learn from past
-                successes and failures, shaping our identity and guiding future
-                actions.
-            </p>
-        </div>
     </div>
+    <div class="relative z-10">
+      <h2
+        class="text-green-700 text-center font-semibold text-2xl md:text-3xl mb-4"
+        style="margin-top: 0;"
+      >
+        History
+      </h2>
+      <hr class="border-t border-gray-300 mb-6" />
+      <p
+        class="text-gray-700 text-base md:text-lg leading-relaxed text-justify"
+        style="margin-bottom: 0;"
+      >
+        History is the study of past events, particularly those concerning human
+        societies, civilizations, and cultures. It involves the exploration and
+        interpretation of records, artifacts, and narratives to understand how
+        people lived, made decisions, and influenced the world over time.
+        Through history, we gain insight into the development of societies, the
+        causes and effects of major events, and the evolution of ideas,
+        institutions, and technologies. It helps us learn from past successes
+        and failures, shaping our identity and guiding future actions.
+      </p>
+      <div class="mt-8 border-b-4 border-green-700 w-full"></div>
+    </div>
+  </div>
 </div>
