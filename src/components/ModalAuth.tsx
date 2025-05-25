@@ -43,9 +43,8 @@ export const ModalAuth = () => {
                 </DialogTrigger>
             </div>
 
-            <DialogContent className="max-w-4xl bg-slate-50 p-0">
-                <div className="">
-                    {/* <a href="/" className="flex items-center p-5 font-medium text-gray-900 md:mb-0">
+            <DialogContent className="max-w-full rounded-lg bg-transparent border-none h-fit p-0">
+                {/* <a href="/" className="flex items-center p-5 font-medium text-gray-900 md:mb-0">
                         <span className="text-xl font-black leading-none text-gray-900 select-none">
                             Sto. Niño<span className="text-indigo-600">.</span>
                         </span>
@@ -54,7 +53,7 @@ export const ModalAuth = () => {
                         </p>
                     </a> */}
 
-                    {/* <div className="flex w-full bg-white rounded-lg p-1 mb-6">
+                {/* <div className="flex w-full bg-white rounded-lg p-1 mb-6">
                         <button
                             className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${mode === "signin"
                                 ? "bg-blue-500 text-white"
@@ -75,10 +74,7 @@ export const ModalAuth = () => {
                         </button>
                     </div> */}
 
-                    <div className="bg-white rounded-xl p-6 shadow-sm">
-                        {mode === "signin" ? <Signin /> : <Signup />}
-                    </div>
-                </div>
+                {mode === "signin" ? <Signin /> : <Signup />}
             </DialogContent>
         </Dialog>
     )

@@ -46,19 +46,17 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                                             </div>
                                         </AccordionContent>
                                     </AccordionItem>
-                                    {approved && (
-                                        <AccordionItem value="services">
-                                            <AccordionTrigger className="text-lg font-bold">Services</AccordionTrigger>
-                                            <AccordionContent>
-                                                <div className="flex flex-col">
-                                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Tickets</a>
-                                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Concern Board</a>
-                                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#docs">Brgy. Documents</a>
-                                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#progs">Community Programs</a>
-                                                </div>
-                                            </AccordionContent>
-                                        </AccordionItem>
-                                    )}
+                                    <AccordionItem value="services">
+                                        <AccordionTrigger className="text-lg font-bold">Services</AccordionTrigger>
+                                        <AccordionContent>
+                                            <div className="flex flex-col">
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Tickets</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Concern Board</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#docs">Brgy. Documents</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#progs">Community Programs</a>
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
                                     <AccordionItem value="feed">
                                         <AccordionTrigger className="text-lg font-bold">Feed</AccordionTrigger>
                                         <AccordionContent>
@@ -115,16 +113,14 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/officials">Officials</a>
                             </Dropdown>
                         </li>
-                        {approved && (
-                            <li>
-                                <Dropdown label="Services">
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Request</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Feedback</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#docs">Brgy. Documents</a>
-                                    <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#progs">Community Programs</a>
-                                </Dropdown>
-                            </li>
-                        )}
+                        <li>
+                            <Dropdown label="Services">
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Request</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Feedback</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#docs">Brgy. Documents</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#progs">Community Programs</a>
+                            </Dropdown>
+                        </li>
                         <li>
                             <Dropdown label="Feed">
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/news">News</a>
