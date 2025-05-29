@@ -1,0 +1,12 @@
+---
+import BrgyPrograms from "@/components/BrgyPrograms";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Programs Admin">
+  <div
+    class="rounded-2xl bg-white p-8 shadow-sm border border-slate-100 transition-all hover:shadow-md"
+  >
+    <BrgyPrograms client:only="react" />
+  </div>
+</Layout>

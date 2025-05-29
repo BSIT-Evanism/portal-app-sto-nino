@@ -3,18 +3,63 @@ import { fetchClient } from "@/lib/utils";
 import InitialModalClient from "./InitialModalClient";
 import { Debug } from "astro:components";
 
-const { data: initialDetails } = await fetchClient.api.initialconfig.get({
-    headers: Object.fromEntries(Astro.request.headers.entries()),
+const { data: initialDetailsRaw } = await fetchClient.api.initialconfig.get({
+  headers: Object.fromEntries(Astro.request.headers.entries()),
 });
+const initialDetails = initialDetailsRaw ?? { hasInitialDetails: false };
 
 const showModal =
-    !initialDetails.hasInitialDetails && Astro.locals.session !== null;
+  !initialDetails.hasInitialDetails && Astro.locals.session !== null;
 ---
 
 {
-    showModal && (
-        <div class="fixed inset-0 z-20 grid place-items-center bg-black/50">
-            <InitialModalClient path={Astro.url.origin} client:only="react" />
-        </div>
-    )
+  showModal && (
+    <div
+      id="initial-modal"
+      class="fixed inset-0 z-20 grid place-items-center bg-black/50"
+    >
+      <button
+        type="button"
+        class="absolute top-4 right-4 z-30 bg-white rounded-full p-2 shadow hover:bg-gray-100 focus:outline-none"
+        aria-label="Close modal"
+        id="close-modal-btn"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 text-gray-700"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      <InitialModalClient path={Astro.url.origin} client:only="react" />
+    </div>
+  )
 }
+
+<script is:inline>
+  document.addEventListener("astro:page-load", () => {
+    const modal = document.getElementById("initial-modal");
+    const closeBtn = document.getElementById("close-modal-btn");
+    if (modal && closeBtn) {
+      // Close when clicking the overlay (not the modal content)
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.classList.add("hidden");
+        }
+      });
+      // Close when clicking the close button
+      closeBtn.addEventListener("click", () => {
+        console.log("TEST");
+        modal.classList.add("hidden");
+      });
+    }
+  });
+</script>

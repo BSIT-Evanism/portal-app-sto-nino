@@ -5,10 +5,16 @@ import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout title="Services">
-  <div id="progs" class="w-full h-full bg-bg">
-    <BrgyProgramsDisplay client:only="react" />
-  </div>
-  <div id="docs" class="w-full h-full bg-bg">
-    <List />
+  <div class="min-h-screen flex flex-col">
+    <div id="progs" class="w-full py-8 px-4 sm:px-6 lg:px-8 bg-bg">
+      <div class="max-w-7xl mx-auto">
+        <BrgyProgramsDisplay client:only="react" />
+      </div>
+    </div>
+    <div id="docs" class="w-full py-8 px-4 sm:px-6 lg:px-8 bg-bg">
+      <div class="max-w-7xl mx-auto">
+        <List />
+      </div>
+    </div>
   </div>
 </Layout>

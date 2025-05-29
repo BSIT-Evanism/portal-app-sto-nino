@@ -1,0 +1,31 @@
+---
+import { HighlightsTable } from "@/components/HighlightsTable";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Highlights Admin">
+  <div
+    class="rounded-2xl bg-white p-8 shadow-sm border border-slate-100 transition-all hover:shadow-md"
+  >
+    <div class="flex items-center gap-3 mb-6">
+      <svg
+        class="w-6 h-6 text-teal-600"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+        ></path>
+      </svg>
+      <h2 class="text-2xl font-semibold text-slate-800">Highlights</h2>
+    </div>
+    <p class="text-slate-600 mb-4">
+      Highlights are used to display content on the home page.
+    </p>
+    <HighlightsTable client:only="react" />
+  </div>
+</Layout>

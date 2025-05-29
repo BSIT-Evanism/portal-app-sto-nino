@@ -93,7 +93,7 @@ export const RequestForm = () => {
                     Submit New Request
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-xl">
+            <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle className="text-xl font-semibold text-gray-900">Submit New Request</DialogTitle>
                     <DialogDescription className="text-gray-500 text-sm">
@@ -106,7 +106,7 @@ export const RequestForm = () => {
                             {error}
                         </div>
                     )}
-                    
+
                     <div className={cn("space-y-2", requestType === 'other' && "bg-gray-50 p-4 rounded-lg border border-gray-100")}>
                         <Label className="text-sm font-medium text-gray-700">Request Type</Label>
                         <Select onValueChange={(value) => setRequestType(value)}>
@@ -176,8 +176,8 @@ export const RequestForm = () => {
                         </div>
                     </div>
 
-                    <Button 
-                        type="submit" 
+                    <Button
+                        type="submit"
                         disabled={loading}
                         className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium"
                     >

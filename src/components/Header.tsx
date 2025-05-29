@@ -16,11 +16,13 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
         <section className="w-full px-8 text-white  bg-gradient-to-t from-green-500 to-black/90">
             <div className="container flex flex-row items-center justify-between text-center py-5 mx-auto w-full">
                 {/* Logo */}
-                <a href="/" className="flex items-center font-medium text-gray-900 ">
+                <a href="/" className="flex items-center font-medium text-gray-900">
                     <img src="/brgy-logo.png" alt="Barangay Logo" className="h-20" />
-                    <div className="ml-4 hidden md:block">
-                        <div className="text-2xl font-extrabold text-white leading-tight">Barangay Sto. Niño</div>
-                        <div className="text-lg font-semibold text-black">Lipa City, Batangas</div>
+                    <div className="ml-4">
+                        <div className="text-2xl font-extrabold text-white leading-tight md:block hidden">Barangay Sto. Niño</div>
+                        <div className="text-lg font-semibold text-black md:block hidden">Lipa City, Batangas</div>
+                        <div className="text-xl font-extrabold text-white leading-tight md:hidden">Brgy. Sto. Niño</div>
+                        <div className="text-base font-semibold text-black md:hidden">Lipa City, Batangas</div>
                     </div>
                 </a>
 
@@ -63,6 +65,7 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                                             <div className="flex flex-col">
                                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/news">News</a>
                                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/announcements">Announcements</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/events">Events</a>
                                             </div>
                                         </AccordionContent>
                                     </AccordionItem>
@@ -125,6 +128,7 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                             <Dropdown label="Feed">
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/news">News</a>
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/announcements">Announcements</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/events">Events</a>
                             </Dropdown>
                         </li>
                         <li>
@@ -143,7 +147,16 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                             </Dropdown>
                         </li>
                         {role === 'admin' && (
-                            <a className="hover:underline px-4 py-2" href="/admin">Admin</a>
+                            <Dropdown label="Admin">
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin">Admin</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/users-admin">Users</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/posts-admin">Posts</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/highlights-admin">Highlights</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/content-admin">Content</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/officers-admin">Officers</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/programs-admin">Programs</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/events-admin">Events</a>
+                            </Dropdown>
                         )}
                     </ul>
                 </nav>

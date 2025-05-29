@@ -25,6 +25,12 @@ import Marquee from "./Marquee.astro";
       loop
       class="w-full h-full object-cover aspect-video"></video>
   </section>
+  <!-- Highlights Section -->
+  <section class="py-12 bg-[#c0c0c0]">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-4xl font-bold text-bg text-center">Highlights</h2>
+    </div>
+  </section>
   <Marquee />
   <Carousel server:defer />
   <!-- Quick Stats Section -->
@@ -106,7 +112,6 @@ import Marquee from "./Marquee.astro";
   <!-- <OfficersDisplay client:only="react" /> -->
 
   <!-- <List /> -->
-  <BrgyEventsDisplay client:only="react" />
   <!-- <BrgyProgramsDisplay client:only="react" /> -->
   <ExploreComp />
 

@@ -1,6 +1,10 @@
 ---
 import SignUp from "@/components/Signup";
 import Layout from "@/layouts/Layout.astro";
+
+if (Astro.locals.session) {
+  return Astro.redirect("/");
+}
 ---
 
 <Layout>

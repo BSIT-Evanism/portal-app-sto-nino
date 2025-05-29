@@ -1,0 +1,8 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import BrgyEventsDisplay from "@/components/BrgyEventsDisplay.tsx";
+---
+
+<Layout title="Events">
+  <BrgyEventsDisplay client:only="react" />
+</Layout>

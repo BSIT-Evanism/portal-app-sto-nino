@@ -31,6 +31,7 @@ export default function SignUp({ onBack }: SignUpProps) {
       },
       onSuccess: (ctx) => {
         //redirect to the dashboard
+        window.location.href = "/";
       },
       onError: (ctx) => {
         setError(ctx.error.message || "An error occurred")

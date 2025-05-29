@@ -1,0 +1,12 @@
+---
+import BrgyEventsTable from "@/components/BrgyEventsTable";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Events Admin">
+  <div
+    class="rounded-2xl bg-white p-8 shadow-sm border border-slate-100 transition-all hover:shadow-md"
+  >
+    <BrgyEventsTable client:only="react" />
+  </div>
+</Layout>
