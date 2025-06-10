@@ -26,11 +26,11 @@
       <div class="flex flex-col items-center md:items-end">
         <h3 class="font-semibold mb-2 text-lg">Contact Us</h3>
         <p class="text-sm text-right">
-          DOST S & T Complex, Sudlon, Lahug, Cebu City, Philippines<br />
+          Barangay Sto. Niño, Lipa City, Batangas, Philippines<br />
           <br />
-          Landline: +63 32 239-1474<br />
-          Phone Number: +63 32 417-3514<br />
-          Email: admin@iishare.com.ph
+          Landline: 774-1560<br />
+          Phone Number: +63922275698<br />
+          Email: brgystonino0411@gmail.com
         </p>
       </div>
     </div>
@@ -69,22 +69,24 @@
           </div>
         )
       } -->
-      <div
-        class="flex gap-2 bg-white rounded-full w-full md:w-auto justify-center md:justify-end"
-      >
-        <a
-          href="/signin"
-          class="bg-slate-100 text-green-700 px-4 py-1 rounded-full font-medium hover:bg-gray-100 transition"
-        >
-          Log in
-        </a>
-        <a
-          href="/signup"
-          class="bg-white text-green-700 px-4 py-1 rounded-full font-medium hover:bg-gray-100 transition"
-        >
-          Register
-        </a>
-      </div>
+      {
+        !Astro.locals.session && (
+          <div class="flex gap-2 bg-white rounded-full w-full md:w-auto justify-center md:justify-end">
+            <a
+              href="/signin"
+              class="bg-slate-100 text-green-700 px-4 py-1 rounded-full font-medium hover:bg-gray-100 transition"
+            >
+              Log in
+            </a>
+            <a
+              href="/signup"
+              class="bg-white text-green-700 px-4 py-1 rounded-full font-medium hover:bg-gray-100 transition"
+            >
+              Register
+            </a>
+          </div>
+        )
+      }
     </div>
   </div>
 </footer>

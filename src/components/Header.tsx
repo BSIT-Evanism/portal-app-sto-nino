@@ -52,9 +52,9 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                                         <AccordionTrigger className="text-lg font-bold">Services</AccordionTrigger>
                                         <AccordionContent>
                                             <div className="flex flex-col">
-                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Tickets</a>
-                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Concern Board</a>
-                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#docs">Brgy. Documents</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Request Document</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Feedbacks</a>
+                                                {/* <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#docs">Brgy. Documents</a> */}
                                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#progs">Community Programs</a>
                                             </div>
                                         </AccordionContent>
@@ -118,9 +118,9 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                         </li>
                         <li>
                             <Dropdown label="Services">
-                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Request</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/tickets">Request Document</a>
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/concern">Feedback</a>
-                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#docs">Brgy. Documents</a>
+                                {/* <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#docs">Brgy. Documents</a> */}
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/services#progs">Community Programs</a>
                             </Dropdown>
                         </li>
@@ -156,6 +156,7 @@ export const MainHeader = ({ role, pathname, approved, hasSession }: { role: str
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/officers-admin">Officers</a>
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/programs-admin">Programs</a>
                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/events-admin">Events</a>
+                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/admin/promotions">Promotions</a>
                             </Dropdown>
                         )}
                     </ul>

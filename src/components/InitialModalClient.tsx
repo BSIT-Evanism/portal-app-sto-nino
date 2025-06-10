@@ -87,15 +87,15 @@ const InitialModalClient = ({ path }: { path: string }) => {
                         console.log(errorMessage)
                         setError(errorMessage)
                         return 'Failed to save details'
+                    } else {
+                        navigate("/")
+                        return 'Details saved successfully'
                     }
-                    return 'Details saved successfully'
                 },
                 error: 'Failed to save details'
             })
         } catch (error) {
             console.error(error)
-        } finally {
-            navigate("/")
         }
     }, [personalDetails, familyMembers]);
 

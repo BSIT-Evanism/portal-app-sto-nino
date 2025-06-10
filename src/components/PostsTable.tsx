@@ -46,6 +46,17 @@ async function deletePost(postId: string) {
     }
 }
 
+async function unarchivePost(postId: string) {
+    try {
+        const { data, error } = await actions.admin.unarchivePost({ postId })
+        if (!error) {
+            window.location.reload()
+        }
+    } catch (error) {
+        console.error('Failed to unarchive post:', error)
+    }
+}
+
 const createColumns = () => {
     const columns: ColumnDef<PostTable>[] = [
         {
@@ -114,47 +125,55 @@ const createColumns = () => {
             accessorKey: "priority",
             header: "Priority",
             cell: ({ row }) => (
-                <Dialog>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                                </svg>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
-                            <DropdownMenuLabel>Options</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuGroup>
-                                <DropdownMenuItem disabled={!!row.original.deletedAt} asChild>
-                                    <a href={`/admin/edit/${row.original.id}`}>
-                                        Edit
-                                    </a>
-                                </DropdownMenuItem>
-                                <DialogTrigger disabled={!!row.original.deletedAt} asChild>
-                                    <DropdownMenuItem>
-                                        Archive
+                <>
+                    <Dialog>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                    </svg>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56">
+                                <DropdownMenuLabel>Options</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuGroup>
+                                    <DropdownMenuItem disabled={!!row.original.deletedAt} asChild>
+                                        <a href={`/admin/edit/${row.original.id}`}>
+                                            Edit
+                                        </a>
                                     </DropdownMenuItem>
-                                </DialogTrigger>
-                            </DropdownMenuGroup>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Are you absolutely sure?</DialogTitle>
-                            {row.original.priority && (<div className="bg-red-300 border-red-500 border-2 text-slate-500 text-sm rounded-md p-2">
-                                <p>You cannot delete a post that is currently in a priority feed.</p>
-                            </div>)}
-                            <DialogDescription>
-                                This action cannot be undone. This will archive your post.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <Button disabled={row.original.priority} onClick={() => deletePost(row.original.id)}>
-                            Archive
-                        </Button>
-                    </DialogContent>
-                </Dialog>
+                                    {!row.original.deletedAt ? (
+                                        <DialogTrigger disabled={!!row.original.deletedAt} asChild>
+                                            <DropdownMenuItem>
+                                                Archive
+                                            </DropdownMenuItem>
+                                        </DialogTrigger>
+                                    ) : (
+                                        <DropdownMenuItem onClick={() => unarchivePost(row.original.id)}>
+                                            Unarchive
+                                        </DropdownMenuItem>
+                                    )}
+                                </DropdownMenuGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                {row.original.priority && (<div className="bg-red-300 border-red-500 border-2 text-slate-500 text-sm rounded-md p-2">
+                                    <p>You cannot delete a post that is currently in a priority feed.</p>
+                                </div>)}
+                                <DialogDescription>
+                                    This action cannot be undone. This will archive your post.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <Button disabled={row.original.priority} onClick={() => deletePost(row.original.id)}>
+                                Archive
+                            </Button>
+                        </DialogContent>
+                    </Dialog>
+                </>
             )
         }
     ]
