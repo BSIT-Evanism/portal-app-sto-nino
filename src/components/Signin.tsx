@@ -17,11 +17,16 @@ export const Signin = ({ onBack }: SigninProps) => {
         const { data, error } = await authClient.signIn.email({
             email: email,
             password: password,
+            fetchOptions: {
+                onSuccess: (data) => {
+                    console.log("data.user", JSON.stringify(data))
+                    // @ts-ignore
+                    window.location.href = data.data.redirect;
+                }
+            }
         })
         if (error) {
             setError(error.message || "An error occurred")
-        } else {
-            window.location.href = "/";
         }
     }
 

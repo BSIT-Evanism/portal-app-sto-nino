@@ -1,12 +1,10 @@
 ---
 import AdminOfficers from "@/components/AdminOfficers";
-import Layout from "@/layouts/Layout.astro";
+import Layout from "@/layouts/AdminLayout.astro";
 ---
 
-<Layout title="Officers Admin">
-  <div
-    class="rounded-2xl bg-white p-8 shadow-sm border border-slate-100 transition-all hover:shadow-md"
-  >
+<Layout>
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
     <AdminOfficers client:only="react" />
   </div>
 </Layout>

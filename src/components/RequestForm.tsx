@@ -114,9 +114,8 @@ export const RequestForm = () => {
                                 <SelectValue placeholder="Select Request Type" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="document">Document Request</SelectItem>
-                                <SelectItem value="permit">Permit Application</SelectItem>
-                                <SelectItem value="blotter">Blotter Report</SelectItem>
+                                <SelectItem value="indigency">Indigency Request</SelectItem>
+                                <SelectItem value="clearance">Clearance Request</SelectItem>
                                 <SelectItem value="other">Other Inquiry</SelectItem>
                             </SelectContent>
                         </Select>

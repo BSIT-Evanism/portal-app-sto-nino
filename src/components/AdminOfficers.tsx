@@ -21,10 +21,12 @@ export default function AdminOfficers() {
         name: string;
         position: PositionType;
         type: "main" | "sk";
+        description: string;
     }>({
         name: "",
         position: POSITIONS[0],
         type: "main",
+        description: "",
     });
     const [submitting, setSubmitting] = useState(false);
 
@@ -33,10 +35,12 @@ export default function AdminOfficers() {
         name: string;
         position: PositionType;
         type: "main" | "sk";
+        description: string;
     }>({
         name: "",
         position: POSITIONS[0],
         type: "main",
+        description: "",
     });
     const [adding, setAdding] = useState(false);
 
@@ -52,6 +56,7 @@ export default function AdminOfficers() {
             name: officer.name,
             position: officer.position,
             type,
+            description: officer.description,
         });
     }
 
@@ -64,6 +69,7 @@ export default function AdminOfficers() {
                 name: form.name,
                 position: form.position,
                 type: form.type,
+                description: form.description,
             });
             if (res?.error) {
                 toast.error(res.error.message || "Failed to update officer");
@@ -104,12 +110,13 @@ export default function AdminOfficers() {
                 name: addForm.name,
                 position: addForm.position,
                 type: addForm.type,
+                description: addForm.description,
             });
             if (res?.error) {
                 toast.error(res.error.message || "Failed to add officer");
             } else {
                 toast.success("Officer added");
-                setAddForm({ name: "", position: POSITIONS[0], type: "main" });
+                setAddForm({ name: "", position: POSITIONS[0], type: "main", description: "" });
                 mutate();
             }
         } catch (err: any) {
@@ -172,6 +179,16 @@ export default function AdminOfficers() {
                         </SelectContent>
                     </Select>
                 </div>
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium">Description</label>
+                    <Input
+                        value={addForm.description}
+                        onChange={e => setAddForm(f => ({ ...f, description: e.target.value }))}
+                        placeholder="Optional description"
+                        className="w-64"
+                        disabled={adding}
+                    />
+                </div>
                 <Button type="submit" disabled={adding || !addForm.name} className="h-10">
                     {adding ? "Adding..." : "Add Officer"}
                 </Button>
@@ -187,13 +204,14 @@ export default function AdminOfficers() {
                                 <tr className="text-left text-slate-600">
                                     <th className="py-2">Name</th>
                                     <th className="py-2">Position</th>
+                                    <th className="py-2">Description</th>
                                     <th className="py-2">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {(type === "main" ? mainOfficers : skOfficers).length === 0 && (
                                     <tr>
-                                        <td colSpan={3} className="text-center text-slate-400 py-4">
+                                        <td colSpan={4} className="text-center text-slate-400 py-4">
                                             No officers found.
                                         </td>
                                     </tr>
@@ -232,6 +250,19 @@ export default function AdminOfficers() {
                                                 </Select>
                                             ) : (
                                                 <span className="capitalize">{officer.position}</span>
+                                            )}
+                                        </td>
+                                        <td className="py-2">
+                                            {editState.id === officer.id && editState.type === type ? (
+                                                <Input
+                                                    value={form.description}
+                                                    onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                                                    placeholder="Optional description"
+                                                    className="w-full"
+                                                    disabled={submitting}
+                                                />
+                                            ) : (
+                                                <span className="text-slate-600">{officer.description || "-"}</span>
                                             )}
                                         </td>
                                         <td className="py-2 flex gap-2">

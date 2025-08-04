@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { Tree, TreeNode } from "react-organizational-chart";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
@@ -9,7 +10,7 @@ const POSITIONS = [
     "councilor"
 ] as const;
 
-type Officer = { id?: number; name?: string; position: string };
+type Officer = { id?: number; name?: string; position: string; description?: string };
 
 function groupOfficials(officials: Officer[]): { chairman?: Officer; secretary?: Officer; treasurer?: Officer; councilors: Officer[] } {
     // Returns { chairman, secretary, treasurer, councilors: [] }
@@ -20,15 +21,54 @@ function groupOfficials(officials: Officer[]): { chairman?: Officer; secretary?:
     return { chairman, secretary, treasurer, councilors };
 }
 
-function OfficialCard({ name, position }: { name?: string; position: string }) {
+function OfficialCard({ name, position, description }: { name?: string; position: string; description?: string }) {
     return (
-        <div className="bg-white rounded shadow-sm border w-full max-w-xs mx-auto mb-4 flex flex-col items-center font-sans">
-            <div className="font-bold text-lg md:text-xl pt-3 pb-1">Name</div>
-            <div className="font-semibold text-base md:text-lg pb-2">{name || <span className="italic text-slate-400">-</span>}</div>
-            <div className="text-gray-700 pb-3 text-sm md:text-base">{position}</div>
-            <div className="w-full h-2 bg-green-700 rounded-b" />
+        <div className="bg-gray-50 rounded-lg border border-gray-200 w-full max-w-xs mx-auto flex flex-col items-center font-sans p-4 shadow-sm">
+            {/* Placeholder for photo */}
+            {/* <div className="w-16 h-16 bg-gray-300 rounded-full mb-3 flex items-center justify-center">
+                <span className="text-gray-600 text-xs">Photo</span>
+            </div> */}
+            <div className="font-bold text-base md:text-lg text-green-700 mb-1 text-center">{name || <span className="italic text-slate-400">-</span>}</div>
+            <div className="font-semibold text-sm md:text-base text-green-700 mb-1 text-center">{position}</div>
+            {description && (
+                <div className="text-xs md:text-sm text-gray-600 text-center mb-2">{description}</div>
+            )}
+            <div className="w-full h-1 bg-green-700 rounded" />
         </div>
     );
+}
+
+// Helper function to assign committees based on councilor index
+function getCouncilorCommittees(index: number): string {
+    const committees = [
+        "Education & Senior Citizen",
+        "Budget and Appropriation; Family, Women and Children",
+        "Agriculture & Social Services",
+        "Health & Environment",
+        "Peace & Order",
+        "Public Works",
+        "Transportation & Communications",
+        "Cooperative; SK - Chairman; Youth & Sports Development"
+    ];
+    return committees[index] || "";
+}
+
+// Helper function to get position display name
+function getPositionDisplayName(position: string, isSK: boolean = false): string {
+    const prefix = isSK ? "SK " : "Barangay ";
+
+    switch (position) {
+        case "chairman":
+            return `${prefix}Chairman`;
+        case "secretary":
+            return `${prefix}Secretary`;
+        case "treasurer":
+            return `${prefix}Treasurer`;
+        case "councilor":
+            return `${prefix}Councilor`;
+        default:
+            return position.charAt(0).toUpperCase() + position.slice(1);
+    }
 }
 
 export default function OfficersDisplay() {
@@ -37,57 +77,105 @@ export default function OfficersDisplay() {
     if (isLoading) return <div>Loading officers...</div>;
     if (error) return <div className="text-red-600">Failed to load officers.</div>;
 
-    const main = groupOfficials((data?.officials || []) as Officer[]);
-    const sk = groupOfficials((data?.skOfficers || []) as Officer[]);
+    const mainOfficials = (data?.officials || []) as Officer[];
+    const skOfficials = (data?.skOfficers || []) as Officer[];
 
-    // Helper to render councilors in rows of 4 (responsive)
-    function renderCouncilors(councilors: Officer[]) {
-        const rows = [];
-        for (let i = 0; i < councilors.length; i += 4) {
-            rows.push(
-                <div key={i} className="flex flex-wrap sm:flex-nowrap justify-center gap-4 sm:gap-8 mb-4">
-                    {councilors.slice(i, i + 4).map((c: Officer, idx: number) => (
-                        <OfficialCard key={c.id || idx} name={c.name} position={c.position === "councilor" ? (c.position.charAt(0).toUpperCase() + c.position.slice(1)) : c.position} />
-                    ))}
-                </div>
-            );
-        }
-        return rows;
-    }
+    // Separate officials by position for main officials
+    const mainChairman = mainOfficials.find(o => o.position === "chairman");
+    const mainCouncilors = mainOfficials.filter(o => o.position === "councilor");
+    const mainOtherOfficials = mainOfficials.filter(o => o.position !== "chairman" && o.position !== "councilor");
+
+    // Separate officials by position for SK officials
+    const skChairman = skOfficials.find(o => o.position === "chairman");
+    const skCouncilors = skOfficials.filter(o => o.position === "councilor");
+    const skOtherOfficials = skOfficials.filter(o => o.position !== "chairman" && o.position !== "councilor");
 
     return (
-        <div className="min-h-screen w-full bg-gradient-to-b from-gray-100 to-gray-700 p-4 sm:p-6 md:p-8">
-            {/* Main Officials */}
-            <div className="rounded-lg p-4 sm:p-6 mb-8 ">
-                <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8">List of Brgy. Officials</h2>
-                <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 mb-4 md:mb-6">
-                    <div className="flex-1 flex justify-center mb-4 md:mb-0">
-                        <OfficialCard name={main.secretary?.name} position="Brgy. Secretary" />
-                    </div>
-                    <div className="flex-1 flex justify-center mb-4 md:mb-0">
-                        <OfficialCard name={main.chairman?.name} position="Brgy. Chairman" />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                        <OfficialCard name={main.treasurer?.name} position="Brgy. Treasurer" />
-                    </div>
+        <div className="min-h-screen w-full bg-white p-4 sm:p-6 md:p-8">
+            {/* Header with Logo */}
+            <div className="text-center mb-8">
+                <div className="flex items-center justify-center mb-4">
+                    {/* <div className="w-16 h-16 bg-green-700 rounded-full flex items-center justify-center mr-4">
+                        <span className="text-white text-xs font-bold text-center">BARANGAY<br />STO. NIÑO<br />SAGISAG</span>
+                    </div> */}
+                    <h1 className="text-3xl md:text-4xl font-bold text-green-700">Barangay Sto. Niño Officials</h1>
                 </div>
-                {renderCouncilors(main.councilors.map((c: Officer) => ({ ...c, position: "Brgy. Councilor" })))}
             </div>
-            {/* SK Officials */}
-            <div className="rounded-lg p-4 sm:p-6 ">
-                <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8">List of SK Officials</h2>
-                <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 mb-4 md:mb-6">
-                    <div className="flex-1 flex justify-center mb-4 md:mb-0">
-                        <OfficialCard name={sk.secretary?.name} position="SK Secretary" />
-                    </div>
-                    <div className="flex-1 flex justify-center mb-4 md:mb-0">
-                        <OfficialCard name={sk.chairman?.name} position="SK Chairman" />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                        <OfficialCard name={sk.treasurer?.name} position="SK Treasurer" />
-                    </div>
+
+            {/* Main Officials Organizational Chart */}
+            <div className="mb-12">
+                <h2 className="text-2xl font-bold text-center mb-8 text-green-700">Main Officials</h2>
+                <div className="flex justify-center">
+                    <Tree
+                        lineWidth="2px"
+                        lineColor="#15803d"
+                        lineBorderRadius="5px"
+                        nodePadding="20px"
+                        label={<OfficialCard name={mainChairman?.name} position={getPositionDisplayName(mainChairman?.position || "")} />}
+                    >
+                        {/* Second Row - All Councilors */}
+                        {mainCouncilors.map((councilor, idx) => (
+                            <TreeNode
+                                key={councilor.id}
+                                label={<OfficialCard
+                                    name={councilor.name}
+                                    position={getPositionDisplayName(councilor.position)}
+                                    description={councilor.description}
+                                />}
+                            />
+                        ))}
+
+                        {/* Third Row - All Other Officials (not chairman or councilor) */}
+                        {mainOtherOfficials.map((official) => (
+                            <TreeNode
+                                key={official.id}
+                                label={<OfficialCard
+                                    name={official.name}
+                                    position={getPositionDisplayName(official.position)}
+                                    description={official.description}
+                                />}
+                            />
+                        ))}
+                    </Tree>
                 </div>
-                {renderCouncilors(sk.councilors.map((c: Officer) => ({ ...c, position: "SK Councilor" })))}
+            </div>
+
+            {/* SK Officials Organizational Chart */}
+            <div>
+                <h2 className="text-2xl font-bold text-center mb-8 text-green-700">SK Officials</h2>
+                <div className="flex justify-center">
+                    <Tree
+                        lineWidth="2px"
+                        lineColor="#15803d"
+                        lineBorderRadius="5px"
+                        nodePadding="20px"
+                        label={<OfficialCard name={skChairman?.name} position={getPositionDisplayName(skChairman?.position || "", true)} />}
+                    >
+                        {/* Second Row - All SK Councilors */}
+                        {skCouncilors.map((councilor, idx) => (
+                            <TreeNode
+                                key={councilor.id}
+                                label={<OfficialCard
+                                    name={councilor.name}
+                                    position={getPositionDisplayName(councilor.position, true)}
+                                    description={councilor.description}
+                                />}
+                            />
+                        ))}
+
+                        {/* Third Row - All SK Other Officials (not chairman or councilor) */}
+                        {skOtherOfficials.map((official) => (
+                            <TreeNode
+                                key={official.id}
+                                label={<OfficialCard
+                                    name={official.name}
+                                    position={getPositionDisplayName(official.position, true)}
+                                    description={official.description}
+                                />}
+                            />
+                        ))}
+                    </Tree>
+                </div>
             </div>
         </div>
     );

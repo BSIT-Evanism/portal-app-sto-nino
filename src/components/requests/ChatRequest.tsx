@@ -66,7 +66,12 @@ export const ChatRequest = ({ requestUpdateId, userId, isAdmin }: { requestUpdat
                             <div className={`flex flex-col gap-1 max-w-[80%] ${chat.userId === userId ? 'items-end' : 'items-start'}`}>
                                 <div className="flex items-center gap-2 px-2">
                                     <span className="text-xs font-medium text-gray-500">
-                                        {(isAdmin && chat.userId === userId) ? "You" : "Admin"}
+                                        {chat.userId === userId
+                                            ? "You"
+                                            : isAdmin
+                                                ? "User"
+                                                : "Admin"
+                                        }
                                     </span>
                                     <time className="text-xs text-gray-400">
                                         {new Date(chat.createdAt).toLocaleTimeString([], {

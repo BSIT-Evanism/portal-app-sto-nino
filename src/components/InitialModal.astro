@@ -6,6 +6,11 @@ import { Debug } from "astro:components";
 const { data: initialDetailsRaw } = await fetchClient.api.initialconfig.get({
   headers: Object.fromEntries(Astro.request.headers.entries()),
 });
+
+const { data: user } = await fetchClient.api.initialconfig.user.get({
+  headers: Object.fromEntries(Astro.request.headers.entries()),
+});
+
 const initialDetails = initialDetailsRaw ?? { hasInitialDetails: false };
 
 const showModal =
@@ -39,7 +44,11 @@ const showModal =
           />
         </svg>
       </button>
-      <InitialModalClient path={Astro.url.origin} client:only="react" />
+      <InitialModalClient
+        path={Astro.url.origin}
+        user={user}
+        client:only="react"
+      />
     </div>
   )
 }

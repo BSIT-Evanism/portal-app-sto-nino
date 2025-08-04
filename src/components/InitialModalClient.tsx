@@ -6,13 +6,13 @@ import { useState, useMemo, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { toast } from "sonner";
 
-const InitialModalClient = ({ path }: { path: string }) => {
+const InitialModalClient = ({ path, user }: { path: string, user: any }) => {
     const [nestedModal, setNestedModal] = useState<boolean>(false);
     const [familyMembers, setFamilyMembers] = useState<FamilyData[]>([]);
     const [personalDetails, setPersonalDetails] = useState({
-        firstName: '',
-        lastName: '',
-        phone: '',
+        firstName: user?.userDetails?.name?.split(' ')[0] || '',
+        lastName: user?.userDetails?.name?.split(' ').at(-1) || '',
+        phone: user?.userDetails?.phone || '',
         address: '',
         birthDate: '',
         gender: ''
@@ -185,8 +185,6 @@ const InitialModalClient = ({ path }: { path: string }) => {
     // Main Modal Content
     const MainModalContent = useMemo(() => (
         <div className="flex flex-col gap-5 bg-white p-4 md:p-7 rounded-xl shadow-sm">
-            <h2 className="text-xl font-semibold text-slate-800">Personal Details</h2>
-            <p className="text-slate-600 text-sm">Please fill in the following details to get started.</p>
             {error.length > 0 && (<div className="flex flex-col gap-2 border border-red-500 p-2 rounded-lg">
                 {error.map((e, index) => (
                     <p key={index} className="text-red-500 text-sm">{e}</p>
@@ -253,13 +251,21 @@ const InitialModalClient = ({ path }: { path: string }) => {
                 </div>
                 <div className="flex-1">
                     <label className={labelStyles}>Address</label>
-                    <input
-                        type="text"
-                        placeholder="Enter address"
+                    <select
                         value={personalDetails.address}
                         onChange={(e) => handlePersonalDetailsChange('address', e.target.value)}
                         className={inputStyles}
-                    />
+                    >
+                        <option value="">Select purok</option>
+                        <option value="Purok 1">Purok 1</option>
+                        <option value="Purok 2">Purok 2</option>
+                        <option value="Purok 3A">Purok 3A</option>
+                        <option value="Purok 3B">Purok 3B</option>
+                        <option value="Purok 4">Purok 4</option>
+                        <option value="Purok 5">Purok 5</option>
+                        <option value="Purok 6">Purok 6</option>
+                        <option value="Purok 7">Purok 7</option>
+                    </select>
                 </div>
             </div>
 

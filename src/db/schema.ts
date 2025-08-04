@@ -16,10 +16,12 @@ export const user = pgTable("user", {
     id: text("id").primaryKey(),
     name: text('name').notNull(),
     email: text('email').notNull().unique(),
+    phone: text('phone'),
     emailVerified: boolean('email_verified').notNull(),
     image: text('image'),
     role: text('role').notNull(),
     approved: boolean('approved').notNull().default(false),
+    rejected: boolean('rejected').notNull().default(false),
     createdAt: timestamp('created_at').notNull(),
     updatedAt: timestamp('updated_at').notNull()
 });
@@ -221,6 +223,7 @@ export const brgyPrograms = pgTable("brgy_programs", {
 export const brgyOfficials = pgTable("brgy_officials", {
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
+    description: text("description"),
     position: text("position", { enum: brgyOfficerPosition.enumValues }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow()
 })
@@ -228,6 +231,7 @@ export const brgyOfficials = pgTable("brgy_officials", {
 export const brgyStaff = pgTable("brgy_sk_officials", {
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
+    description: text("description"),
     position: text("position", { enum: brgyOfficerPosition.enumValues }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow()
 })

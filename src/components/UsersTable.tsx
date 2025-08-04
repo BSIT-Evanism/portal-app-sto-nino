@@ -19,6 +19,7 @@ interface User {
     family: {
         id: number
     }
+    rejected: boolean
 }
 
 const UsersTableNest = ({ users, isLoading, error }: { users: User[] | undefined, isLoading: boolean, error: any }) => {
@@ -36,7 +37,26 @@ const UsersTableNest = ({ users, isLoading, error }: { users: User[] | undefined
 
             if (response.data) {
                 alert('User ' + userId + ' approved: ' + approved);
-                navigate(`/admin`);
+                window.location.reload();
+            } else {
+                console.error(response.error);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    async function rejectUser(userId: string) {
+        try {
+            const response = await actions.admin.rejectUser({
+                userId: userId,
+                reject: true
+            });
+
+            if (response.data) {
+                alert('User ' + userId + ' rejected');
+                window.location.reload();
             } else {
                 console.error(response.error);
             }
@@ -102,11 +122,34 @@ const UsersTableNest = ({ users, isLoading, error }: { users: User[] | undefined
                                         <EyeIcon className="w-4 h-4" />
                                     </Button>
                                 </a>
-                                <form onSubmit={() => approveUser(user.id, !user.approved)} method="post">
-                                    <Button className="w-24" variant={user.approved ? "destructive" : "default"} size="icon">
-                                        {user.approved ? 'Unapprove' : 'Approve'}
-                                    </Button>
-                                </form>
+                                {!user.approved && !user.rejected && (
+                                    <>
+                                        <form onSubmit={() => approveUser(user.id, true)} method="post">
+                                            <Button className="w-24" variant="default" size="icon">
+                                                Approve
+                                            </Button>
+                                        </form>
+                                        <form onSubmit={() => rejectUser(user.id)} method="post">
+                                            <Button className="w-24" variant="destructive" size="icon">
+                                                Reject
+                                            </Button>
+                                        </form>
+                                    </>
+                                )}
+                                {user.approved && (
+                                    <form onSubmit={() => approveUser(user.id, false)} method="post">
+                                        <Button className="w-24" variant="destructive" size="icon">
+                                            Unapprove
+                                        </Button>
+                                    </form>
+                                )}
+                                {user.rejected && (
+                                    <form onSubmit={() => rejectUser(user.id)} method="post">
+                                        <Button className="w-24" variant="default" size="icon">
+                                            Unreject
+                                        </Button>
+                                    </form>
+                                )}
                             </TableCell>
                         </TableRow>
                     ))}

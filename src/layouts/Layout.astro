@@ -10,8 +10,10 @@ import NoticeBar from "@/components/NoticeBar.astro";
 import Footer from "@/components/Footer.astro";
 const status = Astro.locals.user?.role ?? null;
 const approved = Astro.locals.user?.approved ?? false;
-
+const rejected = Astro.locals.user?.rejected ?? false;
 console.log("Astro.locals.user", Astro.locals.user);
+
+const { header = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -26,13 +28,18 @@ console.log("Astro.locals.user", Astro.locals.user);
   </head>
   <body>
     <NoticeBar />
-    <MainHeader
-      hasSession={Astro.locals.session !== null}
-      role={status}
-      pathname={Astro.url.pathname}
-      approved={approved}
-      client:load
-    />
+    {
+      header && (
+        <MainHeader
+          hasSession={Astro.locals.session !== null}
+          role={status}
+          pathname={Astro.url.pathname}
+          approved={approved}
+          rejected={rejected}
+          client:only="react"
+        />
+      )
+    }
     <Toaster transition:persist client:only />
     <slot />
     <Footer />

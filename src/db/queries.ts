@@ -145,6 +145,7 @@ export const getUsers = db.query.user.findMany({
         email: true,
         role: true,
         approved: true,
+        rejected: true,
     },
     with: {
         family: {
@@ -162,5 +163,10 @@ export const getBrgyPrograms = db.query.brgyPrograms.findMany().prepare('getBrgy
 export const getBrgyEvents = db.query.brgyEvents.findMany({
     orderBy: (table, { desc }) => desc(table.startDate),
 }).prepare('getBrgyEvents')
+
+
+export const getUserDetails = db.query.user.findFirst({
+    where: (table, { eq, sql }) => eq(table.id, sql.placeholder("userId")),
+}).prepare('getUserDetails')
 
 // export const getMonthlyRequestCounts = 

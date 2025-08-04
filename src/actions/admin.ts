@@ -1,8 +1,10 @@
 import { db } from "@/db";
 import { brgyOfficerPosition, brgyOfficials, brgyPrograms, brgyStaff, downloadableContent, highlights, postContent, posts, priority, requests, requestUpdateForm, requestUpdates, sectionSequence, user, brgyEvents, brgyPromotionCategories, brgyPromotion } from "@/db/schema";
+import { transporter } from "@/lib/email";
 import { generateId } from "@/lib/utils";
 import { utapi } from "@/utconfig/uploadthing";
 import { ActionError, defineAction, type ActionAPIContext } from "astro:actions";
+import { SENDGRID_EMAIL } from "astro:env/server";
 import { z } from "astro:schema";
 import { eq, inArray, sql, SQL } from "drizzle-orm";
 import { text } from "drizzle-orm/mysql-core";
@@ -401,6 +403,15 @@ export const admin = {
                 })
             }
 
+            if (input.approved) {
+                await transporter.sendMail({
+                    from: SENDGRID_EMAIL,
+                    to: userDetails[0].email,
+                    subject: 'Your account has been approved',
+                    html: `<p>Your account has been approved. You can now login to the portal.</p>`
+                })
+            }
+
             return {
                 success: true,
                 userDetails: userDetails
@@ -665,7 +676,8 @@ export const admin = {
         input: z.object({
             name: z.string(),
             position: z.enum(brgyOfficerPosition.enumValues),
-            type: z.enum(['sk', 'main'])
+            type: z.enum(['sk', 'main']),
+            description: z.string().optional()
         }),
         handler: async (input, context) => {
             await authMiddleware(context)
@@ -688,6 +700,7 @@ export const admin = {
                 const officerRes = await db.insert(brgyStaff).values({
                     name: input.name,
                     position: input.position,
+                    description: input.description,
                 }).returning()
 
                 if (!officerRes) {
@@ -722,6 +735,7 @@ export const admin = {
                 const officerRes = await db.insert(brgyOfficials).values({
                     name: input.name,
                     position: input.position,
+                    description: input.description,
                 }).returning()
 
                 if (!officerRes) {
@@ -749,7 +763,8 @@ export const admin = {
             officerId: z.number(),
             name: z.string(),
             position: z.enum(brgyOfficerPosition.enumValues),
-            type: z.enum(['sk', 'main'])
+            type: z.enum(['sk', 'main']),
+            description: z.string().optional()
         }),
         handler: async (input, context) => {
             await authMiddleware(context);
@@ -773,7 +788,8 @@ export const admin = {
                 }
                 const [officer] = await db.update(brgyStaff).set({
                     name: input.name,
-                    position: input.position
+                    position: input.position,
+                    description: input.description
                 }).where(eq(brgyStaff.id, input.officerId)).returning();
                 if (!officer) {
                     throw new ActionError({
@@ -803,7 +819,8 @@ export const admin = {
                 }
                 const [officer] = await db.update(brgyOfficials).set({
                     name: input.name,
-                    position: input.position
+                    position: input.position,
+                    description: input.description
                 }).where(eq(brgyOfficials.id, input.officerId)).returning();
                 if (!officer) {
                     throw new ActionError({
@@ -1120,6 +1137,41 @@ export const admin = {
             return { success: true, promotions };
         },
     }),
+    rejectUser: defineAction({
+        accept: 'json',
+        input: z.object({
+            userId: z.string(),
+            reject: z.boolean()
+        }),
+        handler: async (input, context) => {
+            await authMiddleware(context)
+
+            const [userData] = await db.update(user).set({
+                rejected: input.reject
+            }).where(eq(user.id, input.userId)).returning()
+
+            if (!userData) {
+                throw new ActionError({
+                    code: 'NOT_FOUND',
+                    message: 'User not found'
+                })
+            }
+
+            if (input.reject) {
+                await transporter.sendMail({
+                    from: SENDGRID_EMAIL,
+                    to: userData.email,
+                    subject: 'Your account has been rejected',
+                    html: `<p>Your account has been rejected. Please contact the administrator for more information.</p>`
+                })
+            }
+
+            return {
+                success: true,
+                userData: userData
+            }
+        }
+    })
 }
 
 

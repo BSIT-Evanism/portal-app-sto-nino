@@ -1,6 +1,6 @@
 import { Elysia } from 'elysia';
 import { cache } from '../utils/cache';
-import { getRequests, getRequest, getRequestLogs, getUserFamily } from '@/db/queries';
+import { getRequests, getRequest, getRequestLogs, getUserFamily, getUserDetails } from '@/db/queries';
 import { utapi } from '@/utconfig/uploadthing';
 import _ from 'lodash';
 import { userMiddleware } from '../auth';
@@ -171,6 +171,19 @@ export const requestRoutes = new Elysia()
                         }
                     }
                 }
+            }
+        })
+        .get("/initialconfig/user", async ({ user }) => {
+            if (!user) {
+                throw new Error('Unauthorized');
+            }
+
+            const userDetails = await getUserDetails.execute({ userId: user.id });
+
+            console.log(userDetails);
+
+            return {
+                userDetails
             }
         })
         .get("/chatrequests/:requestUpdateId", async ({ params, user }) => {

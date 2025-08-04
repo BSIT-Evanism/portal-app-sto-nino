@@ -82,9 +82,7 @@ export const server = {
                 }),
                 gender: z.string(),
                 relationship: z.string()
-            })).min(1, {
-                message: 'Please add at least one family member'
-            })
+            }))
         }),
         handler: async (input, context) => {
             console.log(input)

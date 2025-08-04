@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { ChevronRightIcon } from "lucide-react";
+import { ArrowLeftIcon, ChevronRightIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
@@ -39,6 +39,11 @@ export const EditSidebar = ({ post }: { post: Post }) => {
         <div className="w-[400px] p-6 m-4 bg-white rounded-lg shadow-sm">
             <div className="sticky top-6 space-y-8 overflow-hidden bg-white">
                 <div>
+                    <a href="/admin/edit/1">
+                        <Button variant="ghost" className="w-full hover:bg-slate-300" size="icon">
+                            <ArrowLeftIcon className="w-4 h-4" /> Back to Posts
+                        </Button>
+                    </a>
                     <div className="flex items-center justify-between bg-slate-100 rounded-lg p-1 mb-2 gap-2">
                         <Button variant="ghost" className={cn("w-full hover:bg-slate-300", tab === "manual" && "bg-slate-200")} size="icon" onClick={() => setTab("manual")}>
                             Instructions
