@@ -42,7 +42,7 @@ export const MainHeader = ({ role, pathname, approved, hasSession, rejected }: {
                                         <AccordionTrigger className="text-lg font-bold">About</AccordionTrigger>
                                         <AccordionContent>
                                             <div className="flex flex-col">
-                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/mission-vision">Mission and Vision</a>
+                                                <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/mission-vision">Mission, Vision, and Goal</a>
                                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/history">History</a>
                                                 <a className="block px-6 py-3 hover:bg-accent hover:text-accent-foreground text-base font-bold" href="/about/officials">Officials</a>
                                             </div>
