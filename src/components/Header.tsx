@@ -13,7 +13,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./
 
 export const MainHeader = ({ role, pathname, approved, hasSession, rejected }: { role: string | null, pathname: string, approved: boolean, hasSession: boolean, rejected: boolean }) => {
     return (
-        <section className="w-full px-8 text-white  bg-gradient-to-t from-green-500 to-black/90">
+        <section className="w-full px-8 text-white  bg-gradient-to-t from-green-500 to-black/90 fixed top-0 z-50">
             <div className="container flex flex-row items-center justify-between text-center py-5 mx-auto w-full">
                 {/* Logo */}
                 <a href="/" className="flex items-center font-medium text-gray-900">

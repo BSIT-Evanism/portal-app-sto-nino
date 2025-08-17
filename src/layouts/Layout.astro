@@ -27,7 +27,6 @@ const { header = true } = Astro.props;
     <title>Portal</title>
   </head>
   <body>
-    <NoticeBar />
     {
       header && (
         <MainHeader
@@ -40,6 +39,8 @@ const { header = true } = Astro.props;
         />
       )
     }
+    <div class="mt-40"></div>
+    <NoticeBar />
     <Toaster transition:persist client:only />
     <slot />
     <Footer />

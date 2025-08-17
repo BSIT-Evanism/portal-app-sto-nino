@@ -124,24 +124,28 @@ export default function OfficersDisplay() {
                                 />}
                             />
                         ))}
+                    </Tree>
+                </div>
 
-                        {/* Third Row - All Other Officials (not chairman or councilor) */}
-                        {mainOtherOfficials.map((official) => (
-                            <TreeNode
-                                key={official.id}
-                                label={<OfficialCard
+                {/* Third Row - All Other Officials (not chairman or councilor) - Separated from tree */}
+                {mainOtherOfficials.length > 0 && (
+                    <div className="flex justify-center mt-8">
+                        <div className="flex gap-4 justify-center">
+                            {mainOtherOfficials.map((official) => (
+                                <OfficialCard
+                                    key={official.id}
                                     name={official.name}
                                     position={getPositionDisplayName(official.position)}
                                     description={official.description}
-                                />}
-                            />
-                        ))}
-                    </Tree>
-                </div>
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* SK Officials Organizational Chart */}
-            <div>
+            <div className="mt-20">
                 <h2 className="text-2xl font-bold text-center mb-8 text-green-700">SK Officials</h2>
                 <div className="flex justify-center">
                     <Tree
@@ -162,20 +166,24 @@ export default function OfficersDisplay() {
                                 />}
                             />
                         ))}
+                    </Tree>
+                </div>
 
-                        {/* Third Row - All SK Other Officials (not chairman or councilor) */}
-                        {skOtherOfficials.map((official) => (
-                            <TreeNode
-                                key={official.id}
-                                label={<OfficialCard
+                {/* Third Row - All SK Other Officials (not chairman or councilor) - Separated from tree */}
+                {skOtherOfficials.length > 0 && (
+                    <div className="flex justify-center mt-8">
+                        <div className="flex gap-4 justify-center">
+                            {skOtherOfficials.map((official) => (
+                                <OfficialCard
+                                    key={official.id}
                                     name={official.name}
                                     position={getPositionDisplayName(official.position, true)}
                                     description={official.description}
-                                />}
-                            />
-                        ))}
-                    </Tree>
-                </div>
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
