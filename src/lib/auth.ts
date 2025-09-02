@@ -62,20 +62,20 @@ export const auth = betterAuth({
                 }
             }
 
-            if (ctx.path.startsWith('/sign-in')) {
-                const newSession = ctx.context.newSession;
-                if (newSession) {
-                    if (newSession.user.role === 'admin') {
-                        ctx.context.returned = {
-                            redirect: '/admin'
-                        };
-                    } else {
-                        ctx.context.returned = {
-                            redirect: '/'
-                        };
-                    }
-                }
-            }
+            // if (ctx.path.startsWith('/sign-in')) {
+            //     const newSession = ctx.context.newSession;
+            //     if (newSession) {
+            //         if (newSession.user.role === 'admin') {
+            //             ctx.context.returned = {
+            //                 redirect: '/admin'
+            //             };
+            //         } else {
+            //             ctx.context.returned = {
+            //                 redirect: '/'
+            //             };
+            //         }
+            //     }
+            // }
         }),
     },
 })

@@ -21,7 +21,7 @@ export const Signin = ({ onBack }: SigninProps) => {
                 onSuccess: (data) => {
                     console.log("data.user", JSON.stringify(data))
                     // @ts-ignore
-                    window.location.href = data.data.redirect;
+                    window.location.href = "/";
                 }
             }
         })
