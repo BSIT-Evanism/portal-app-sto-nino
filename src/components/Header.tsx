@@ -11,7 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./
 
 
 
-export const MainHeader = ({ role, pathname, approved, hasSession, rejected }: { role: string | null, pathname: string, approved: boolean, hasSession: boolean, rejected: boolean }) => {
+export const MainHeader = ({ role, pathname, approved, hasSession, rejected, isAdmin }: { role: string | null, pathname: string, approved: boolean, hasSession: boolean, rejected: boolean, isAdmin: boolean }) => {
     return (
         <section className="w-full px-8 text-white  bg-gradient-to-t from-green-500 to-black/90 fixed top-0 z-50">
             <div className="container flex flex-row items-center justify-between text-center py-5 mx-auto w-full">
@@ -101,7 +101,7 @@ export const MainHeader = ({ role, pathname, approved, hasSession, rejected }: {
                                                 "text-xs px-3 py-1 rounded-full font-medium text-white cursor-help inline-block",
                                                 approved ? "bg-green-500" : rejected ? "bg-red-500" : "bg-orange-500"
                                             )}>
-                                                {approved ? "Approved" : rejected ? "Denied" : "Pending"}
+                                                {(approved) ? "Approved" : rejected ? "Denied" : "Pending"}
                                             </div>
                                             <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 max-w-48 break-words">
                                                 {approved ? "Your account has been approved. You now have full access to the portal." :
@@ -177,7 +177,7 @@ export const MainHeader = ({ role, pathname, approved, hasSession, rejected }: {
 
                 {/* Auth Section (desktop) */}
                 <div className="hidden md:flex items-center space-x-6">
-                    {hasSession && (
+                    {hasSession && (isAdmin && role !== 'admin') && (
                         <div className="relative group">
                             <div className={cn(
                                 "text-xs px-3 py-1 rounded-full font-medium text-white cursor-help",

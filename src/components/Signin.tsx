@@ -21,7 +21,7 @@ export const Signin = ({ onBack }: SigninProps) => {
                 onSuccess: (data) => {
                     console.log("data.user", JSON.stringify(data))
                     // @ts-ignore
-                    window.location.href = "/";
+                    window.location.href = "/admin";
                 }
             }
         })
@@ -52,7 +52,7 @@ export const Signin = ({ onBack }: SigninProps) => {
     }
 
     return (
-        <div className="w-full flex flex-col items-center justify-center z-50 relative">
+        <div className="w-full flex flex-col items-center justify-center z-20 relative">
             <button
                 onClick={handleBack}
                 className="absolute top-2 left-2 flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow z-10"

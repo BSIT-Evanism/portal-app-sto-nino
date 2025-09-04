@@ -11,6 +11,7 @@ import Footer from "@/components/Footer.astro";
 const status = Astro.locals.user?.role ?? null;
 const approved = Astro.locals.user?.approved ?? false;
 const rejected = Astro.locals.user?.rejected ?? false;
+const isAdmin = Astro.locals.user?.role === "admin" || false;
 console.log("Astro.locals.user", Astro.locals.user);
 
 const { header = true } = Astro.props;
@@ -35,6 +36,7 @@ const { header = true } = Astro.props;
           pathname={Astro.url.pathname}
           approved={approved}
           rejected={rejected}
+          isAdmin={isAdmin}
           client:only="react"
         />
       )

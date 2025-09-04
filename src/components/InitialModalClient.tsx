@@ -289,7 +289,7 @@ const InitialModalClient = ({ path, user }: { path: string, user: any }) => {
     ), [personalDetails, familyMembers, handleSubmit, error]);
 
     return (
-        <>
+        <div className="">
             <div className="flex-1 flex flex-col gap-3 bg-slate-100 p-3 md:p-6 rounded-xl m-2 overflow-y-auto">
                 {MainModalContent}
             </div>
@@ -297,7 +297,7 @@ const InitialModalClient = ({ path, user }: { path: string, user: any }) => {
             {/* Nested Modal for Family Members */}
             {nestedModal && (
                 <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-0 md:p-4">
-                    <div className="bg-white rounded-xl w-full h-full md:w-[80%] md:h-[80vh] md:max-w-4xl flex flex-col">
+                    {createPortal(<div className="bg-white fixed top-0 left-0 right-0 bottom-0 m-auto rounded-xl z-50 w-full h-full md:w-[80%] md:h-[80vh] md:max-w-4xl flex flex-col">
                         {/* Fixed Header */}
                         <div className="flex-shrink-0 flex flex-col md:flex-row items-start md:items-center justify-between p-4 md:p-7 border-b border-slate-100">
                             <h2 className="text-xl font-semibold text-slate-800 mb-4 md:mb-0">Add Family Members</h2>
@@ -340,10 +340,10 @@ const InitialModalClient = ({ path, user }: { path: string, user: any }) => {
                                 Save Family Members
                             </button>
                         </div>
-                    </div>
+                    </div>, document.body)}
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

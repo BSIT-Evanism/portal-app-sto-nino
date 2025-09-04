@@ -34,6 +34,10 @@ if (pathname.includes("/users")) {
 const user = Astro.locals.user;
 const userName = user?.name || "Admin";
 const userRole = user?.role || "Admin";
+
+if (Astro.locals.user?.role !== "admin") {
+  return Astro.redirect("/");
+}
 ---
 
 <!doctype html>
@@ -67,7 +71,6 @@ const userRole = user?.role || "Admin";
               >
                 <User className="w-4 h-4 text-gray-600" />
               </div>
-              <ChevronDown className="w-4 h-4 text-gray-400" />
             </div>
           </div>
         </header>

@@ -6,10 +6,6 @@ import InitialModal from "@/components/InitialModal.astro";
 if (!Astro.locals.session) {
   return Astro.redirect("/signin");
 }
-
-if (Astro.locals.user?.role === "admin") {
-  return Astro.redirect("/admin");
-}
 ---
 
 <Layout>

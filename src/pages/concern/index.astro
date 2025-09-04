@@ -18,8 +18,8 @@ const dateParams = Astro.url.searchParams.get("date") || dateTodayNoTime;
 // Fetch concerns for the selected date (you'll need to implement this)
 
 // Format date in a consistent way for both server and client
-// Format date in local timezone
-const formattedDate = new Date(dateParams).toLocaleDateString("en-US", {
+// Format date in PH locale (Tagalog/Filipino, Philippines)
+const formattedDate = new Date(dateParams).toLocaleDateString("fil-PH", {
   year: "numeric",
   month: "long",
   day: "numeric",
